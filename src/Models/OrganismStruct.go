@@ -1,4 +1,4 @@
-package structs
+package Models
 
 type Organism struct {
 	ID uint64   `json:"id"`

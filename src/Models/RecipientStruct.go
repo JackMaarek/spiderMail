@@ -1,4 +1,4 @@
-package structs
+package Models
 
 type Recipient struct {
 	Name string `json:"name"`
