@@ -4,9 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"spiderMail/Models"
+	"spiderMail/Services"
 )
 
-func Login(user, c *gin.Context) {
+var user = Models.User{
+	ID:    1,
+	Email: "Jooj@jooj.com",
+	Password: "JOOJ123",
+}
+
+func Login(c *gin.Context) {
 	var u Models.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
@@ -17,10 +24,10 @@ func Login(user, c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
 		return
 	}
-	//token, err := CreateToken(user.ID)
-	//if err != nil {
-	//	c.JSON(http.StatusUnprocessableEntity, err.Error())
-	//		return
-	//}
+	token, err := Services.CreateToken(user.ID)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+			return
+	}
 	c.JSON(http.StatusOK, token)
 }

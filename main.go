@@ -1,15 +1,9 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"log"
-)
-
-var (
-	router = gin.Default()
+	"spiderMail/Routes"
 )
 
 func main() {
-	router.POST("/login")
-	log.Fatal(router.Run(":8080"))
+	Routes.SetupRouter()
 }
