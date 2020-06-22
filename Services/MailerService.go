@@ -7,16 +7,16 @@ import (
 )
 
 type Config struct {
-	GMAIL_USER   	string `env:"GMAIL_USER"`
-	GMAIL_PASSWORD  string    `env:"GMAIL_PASSWORD"`
+	PROVIDER_KEY   	string `env:"PROVIDER_KEY"`
+	PROVIDER_SECRET  string    `env:"PROVIDER_SECRET"`
 }
 
 func main() {
 	cfg := Config{}
 	env.Parse(&cfg)
 
-	var password string = os.Getenv("GMAIL_PASSWORD")
-	var author string = os.Getenv("GMAIL_USER")
+	var password string = os.Getenv("PROVIDER_SECRET")
+	var author string = os.Getenv("PROVIDER_KEY")
 
 	sendMail(author, password, "edwin.vautier@gmail.com", "Test", "<h1>Hello Edwin</h1><br><ul><li>1</li><li>2</li></ul>")
 }
