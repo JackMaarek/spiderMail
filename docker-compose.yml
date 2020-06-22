@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: spidermail
+      MYSQL_USER: spidermail
+      MYSQL_PASSWORD: spidermail
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  app:
+    build: .
+    volumes:
+      - ".:/go/src"
+    ports:
+      - "8080:8080"
+    tty: true
+    depends_on:
+      - db
