@@ -10,10 +10,6 @@ var (
 )
 
 func main() {
-	router.POST("/login", Login)
+	router.POST("/login")
 	log.Fatal(router.Run(":8080"))
-}
-
-func Login(c *gin.Context) {
-	println("jooj")
 }
