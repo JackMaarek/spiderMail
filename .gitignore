@@ -117,3 +117,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Mysql data
+mysql_data/
+
+#Compiled version
+main
