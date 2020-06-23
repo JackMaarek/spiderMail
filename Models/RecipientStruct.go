@@ -1,6 +1,6 @@
 package Models
 
 type Recipient struct {
-	Name string `json:"name"`
-	Email string `json:"email"`
+	Name string `gorm:"size:255"`
+	Email string `gorm:"size:255"`
 }

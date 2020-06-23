@@ -1,6 +1,6 @@
 package Models
 
 type Organism struct {
-	ID uint64   `json:"id"`
-	Name string `json:"name"`
+	ID uint64   `gorm:"primary_key"`
+	Name string `gorm:"size:255"`
 }

@@ -31,11 +31,20 @@ func GetUserById(id int) *gorm.DB{
 	// Get user by id
 	var user User
 
-	return db.First(&user, 1)
+	return db.First(&user, id)
 }
 
 func CreateUser(user User) *gorm.DB{
 	db := Database.Connect()
 	defer db.Close()
 
+	return db.Create(user)
+}
+
+func DeleteUserById (id int) *gorm.DB{
+	db := Database.Connect()
+	defer db.Close()
+	var user User
+
+	return db.Delete(&user, id)
 }

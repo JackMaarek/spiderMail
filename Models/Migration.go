@@ -6,7 +6,7 @@ func MakeMigrations() {
 	db := Database.Connect()
 
 	// Make migrations
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{}, &Campaign{}, &Organism{}, &Recipient{}, &Token{})
 
 	db.Close()
 }
