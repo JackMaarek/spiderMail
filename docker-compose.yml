@@ -17,6 +17,12 @@ services:
     - "3306:3306"
   app:
     build: .
+    environment:
+      DB_USER: spidermail
+      DB_PASSWORD: spidermail
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: spidermail
     volumes:
       - ".:/go/src"
     ports:
