@@ -22,6 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 	models.InitializeDb(cfg.DbUser, cfg.DbPassword, cfg.DbHost, cfg.DbName, cfg.DbPort)
+	Models.MakeMigrations()
 	router := gin.Default()
 	routes.SetupRouter(router)
 
