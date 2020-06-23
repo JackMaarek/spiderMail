@@ -21,7 +21,12 @@ func GetAllUsers() *gorm.DB{
 	// Get users
 	var users []User
 
-	return db.Find(&users)
+	all_users := db.Find(&users)
+	if all_users.Error != nil {
+		panic(all_users.Error)
+	}
+
+	return all_users
 }
 
 func GetUserById(id int) *gorm.DB{
@@ -31,14 +36,24 @@ func GetUserById(id int) *gorm.DB{
 	// Get user by id
 	var user User
 
-	return db.First(&user, id)
+	res_user := db.First(&user, id)
+	if res_user.Error != nil {
+		panic(res_user.Error)
+	}
+
+	return res_user
 }
 
 func CreateUser(user User) *gorm.DB{
 	db := Database.Connect()
 	defer db.Close()
 
-	return db.Create(user)
+	res_user := db.Create(user)
+	if res_user.Error != nil {
+		panic(res_user.Error)
+	}
+
+	return res_user
 }
 
 func DeleteUserById (id int) *gorm.DB{
@@ -46,5 +61,10 @@ func DeleteUserById (id int) *gorm.DB{
 	defer db.Close()
 	var user User
 
-	return db.Delete(&user, id)
+	response := db.Delete(&user, id)
+	if response.Error != nil {
+		panic(response.Error)
+	}
+
+	return response
 }
