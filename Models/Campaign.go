@@ -11,6 +11,7 @@ type Campaign struct {
 	DateCreated time.Time `json:"date_created"`
 	User        User      //`json:"user"`
 	Subject     string    `json:"subject"`
+	Content 	string 	  `json:"body"`
 	Attachments os.File   `json:"attachments"`
 	Recipients  []Recipient
 }

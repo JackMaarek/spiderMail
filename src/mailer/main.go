@@ -30,7 +30,6 @@ func sendMail(author string,password string, to string, subject string, body str
 
 	d := gomail.NewDialer("smtp.gmail.com", 465, author, password)
 
-	// Send the email to Bob, Cora and Dan.
 	if err := d.DialAndSend(mail); err != nil {
 		panic(err)
 	}
