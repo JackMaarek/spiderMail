@@ -1,7 +1,7 @@
 package main
 
 import (
-	"spiderMail/Routes"
+	"github.com/JackMaarek/spiderMail/Routes"
 )
 
 func main() {

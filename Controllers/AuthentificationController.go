@@ -3,8 +3,8 @@ package Controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"spiderMail/Models"
-	"spiderMail/Services"
+	"github.com/JackMaarek/spiderMail/Models"
+	"github.com/JackMaarek/spiderMail/Services"
 )
 
 var user = Models.User{

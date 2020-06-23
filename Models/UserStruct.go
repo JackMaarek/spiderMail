@@ -1,9 +1,12 @@
 package Models
 
+import "github.com/jinzhu/gorm"
+
 type User struct {
-	ID uint64         `json:"id"`
-	Name string       `json:"name"`
-	Password string   `json:"password"`
-	Email string      `json:"email"`
-	Company *Organism //`json:"company",one-to-many:"Organism"`
+	gorm.Model
+	ID uint64         `gorm:"primary_key"`
+	Name string       `gorm:"size:255"`
+	Password string   `gorm:"size:255"`
+	Email string      `gorm:"size:255"`
+	//Company *Organism //`json:"company",one-to-many:"Organism"`
 }

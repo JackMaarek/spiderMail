@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"spiderMail/Controllers"
+	"github.com/JackMaarek/spiderMail/Controllers"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 
 func SetupRouter(){
 	router.POST("/login", Controllers.Login)
-
+	router.GET("/users", Controllers.GetUsers)
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
 	})

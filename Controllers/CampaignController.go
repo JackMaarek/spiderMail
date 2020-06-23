@@ -1,21 +1,17 @@
 package Controllers
 
-import (
-"github.com/gin-gonic/gin"
-"net/http"
-"spiderMail/Models"
-"spiderMail/Services"
-)
+/*var campaign = Models.Campaign {
+	ID:			1,
+	Name:       "Advertisment program.",
+	DateCreated: time.Now(),
+	User:        User,
+	Subject:     "Welcome to our fidelity program!",
+	Content: 	"<h1>Welcome here !</h1>",
+	Attachments: nil,
+	Recipients:  []
+	}
 
-var campaign = Models.Campaign{
-	ID:    1,
-	Name:  "Campagne publicitaire mail n°1",
-	Subject: "On compte sur vous!",
-	Content: "<h1>Hello!</h1>",
-
-}
-
-func Login(c *gin.Context) {
+func GetAllCampaigns(c *gin.Context) {
 	var u Models.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
@@ -26,10 +22,5 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
 		return
 	}
-	token, err := Services.CreateToken(user.ID)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
-		return
-	}
 	c.JSON(http.StatusOK, token)
-}
+}*/
