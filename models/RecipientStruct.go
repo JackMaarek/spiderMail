@@ -2,53 +2,80 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+
+	"errors"
 )
 
 type Recipient struct {
+	ID uint64 `gorm: "primary_key"`
 	Name  string `gorm:"size:255"`
 	Email string `gorm:"size:255"`
+	RecipientsLists []*RecipientsList `gorm:"many2many:mail_lists;"`
 }
 
-func GetRecipients() *gorm.DB {
+func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
+	var err error
+	var recipients []Recipient
 
-	var recipients Recipient
-	all_recipients := db.Find(&recipients)
+	err = db.Debug().Model(RecipientsList{}).Where("id = ?", uid).Related(&recipients).Take(&recipients).Error
 
-	if all_recipients.Error != nil {
-		panic(all_recipients.Error)
+	if err != nil {
+		return &[]Recipient{}, err
 	}
-
-	return all_recipients
+	if gorm.IsRecordNotFoundError(err) {
+		return &[]Recipient{}, errors.New("No recipients found")
+	}
+	return &recipients, err
 }
 
-func GetRecipientById(id int) *gorm.DB {
-
+func FindRecipientByID(uid uint32) (*Recipient, error) {
+	var err error
 	var recipient Recipient
-	res_recipient := db.First(&recipient, id)
-	if res_recipient.Error != nil {
-		panic(res_recipient.Error)
+	err = db.Debug().Model(Recipient{}).Where("id = ?", uid).Take(&recipient).Error
+	if err != nil {
+		return &Recipient{}, err
 	}
-
-	return res_recipient
+	if gorm.IsRecordNotFoundError(err) {
+		return &Recipient{}, errors.New("Recipient Not Found")
+	}
+	return &recipient, err
 }
 
-func CreateRecipient(recipient Recipient) *gorm.DB {
-
-	res_recipient := db.Create(recipient)
-	if res_recipient.Error != nil {
-		panic(res_recipient.Error)
-	}
-
-	return res_recipient
-}
-
-func DeleteRecipientbyId(id int) *gorm.DB {
-
+func DeleteRecipientByID(uid uint32) (*Recipient, error) {
+	var err error
 	var recipient Recipient
-	response := db.Delete(&recipient, id)
-	if response.Error != nil {
-		panic(response.Error)
+
+	err = db.Debug().Model(Campaign{}).Where("id = ?", uid).Delete(&recipient).Error
+	if err != nil {
+		return &Recipient{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Recipient{}, errors.New("Recipient Not Found")
+	}
+	return &recipient, err
+}
+
+func EditrecipientByID(recipient Recipient) (*Recipient, error) {
+	var err error
+	uid := recipient.ID
+
+	err = db.Debug().Model(Recipient{}).Where("id = ?", uid).Save(&recipient).Take(&recipient).Error
+	if err != nil {
+		return &Recipient{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Recipient{}, errors.New("Recipient Not Found")
+	}
+	return &recipient, err
+}
+
+func CreateRecipient(recipient Recipient) (*Recipient, error) {
+	var err error
+	err = db.Debug().Model(Recipient{}).Create(recipient).Error
+
+	if err != nil {
+		return &Recipient{}, err
 	}
 
-	return response
+	return &recipient, err
 }

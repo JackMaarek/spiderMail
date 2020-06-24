@@ -2,6 +2,8 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+
+	"errors"
 )
 
 type Organism struct {
@@ -9,45 +11,55 @@ type Organism struct {
 	Name string `gorm:"size:255"`
 }
 
-func GetOrganisms() *gorm.DB {
 
-	var organisms []Organism
-	all_organisms := db.Find(&organisms)
-	if all_organisms.Error != nil {
-		panic(all_organisms.Error)
-	}
-
-	return all_organisms
-}
-
-func GetOrganismById(id int) *gorm.DB {
-
+func FindOrganismByID(uid uint32) (*Organism, error) {
+	var err error
 	var organism Organism
-	res_organism := db.First(&organism, id)
-	if res_organism.Error != nil {
-		panic(res_organism.Error)
+	err = db.Debug().Model(Organism{}).Where("id = ?", uid).Take(&organism).Error
+	if err != nil {
+		return &Organism{}, err
 	}
-
-	return res_organism
+	if gorm.IsRecordNotFoundError(err) {
+		return &Organism{}, errors.New("Organism Not Found")
+	}
+	return &organism, err
 }
 
-func CreateOrganism(organism Organism) *gorm.DB {
-
-	res_organism := db.Create(organism)
-	if res_organism.Error != nil {
-		panic(res_organism.Error)
-	}
-
-	return res_organism
-}
-
-func DeleteOrganismbyId(id int) *gorm.DB {
-
+func DeleteOrganismByID(uid uint32) (*Organism, error) {
+	var err error
 	var organism Organism
-	response := db.Delete(&organism, id)
-	if response.Error != nil {
-		panic(response.Error)
+
+	err = db.Debug().Model(Organism{}).Where("id = ?", uid).Delete(&organism).Error
+	if err != nil {
+		return &Organism{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Organism{}, errors.New("Organism Not Found")
+	}
+	return &organism, err
+}
+
+func EditOrganismByID(organism Organism) (*Organism, error) {
+	var err error
+	uid := organism.ID
+
+	err = db.Debug().Model(Campaign{}).Where("id = ?", uid).Save(&organism).Take(&organism).Error
+	if err != nil {
+		return &Organism{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Organism{}, errors.New("Organism Not Found")
+	}
+	return &organism, err
+}
+
+func CreateOrganism(organism Organism) (*Organism, error) {
+	var err error
+	err = db.Debug().Model(Organism{}).Create(organism).Error
+
+	if err != nil {
+		return &Organism{}, err
 	}
 
-	return response
+	return &organism, err
 }

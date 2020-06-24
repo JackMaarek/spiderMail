@@ -10,10 +10,10 @@ type Campaign struct {
 	ID          uint64    `gorm:"primary_key"`
 	Name        string    `gorm:"size:255"`
 	DateCreated time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
-	Company_id uint64
+	OrganismId uint64
 	Subject     string    `gorm:"size:255"`
 	Content 	string 	  `gorm:"size:1023"`
-	RecipientsList  uint64
+	RecipientsListId  uint64
 }
 
 func FindCampaignsByCompany(uid uint32) (*[]Campaign, error) {
