@@ -80,15 +80,14 @@ func ValidateUser(user User, action string) error {
 	}
 }
 
-func SaveUser() (*User, error) {
+func CreateUser(user *User) (*User, error) {
 
 	var err error
-	var user User
 	err = db.Debug().Create(&user).Error
 	if err != nil {
 		return &User{}, err
 	}
-	return &user, nil
+	return user, nil
 }
 
 func FindAllUsers() (*[]User, error) {
