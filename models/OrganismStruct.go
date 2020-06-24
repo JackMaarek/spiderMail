@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-
 	"errors"
 )
 
@@ -11,18 +10,27 @@ type Organism struct {
 	Name string `gorm:"size:255"`
 }
 
-
-func FindOrganismByID(uid uint32) (*Organism, error) {
+func FindOrganismByID(uid uint64) (Organism, error) {
 	var err error
 	var organism Organism
-	err = db.Debug().Model(Organism{}).Where("id = ?", uid).Take(&organism).Error
+	err = db.Debug().First(&organism, uid).Error
 	if err != nil {
-		return &Organism{}, err
+		return Organism{}, err
 	}
 	if gorm.IsRecordNotFoundError(err) {
-		return &Organism{}, errors.New("Organism Not Found")
+		return Organism{}, errors.New("Organism Not Found")
 	}
-	return &organism, err
+	return organism, nil
+}
+
+func FindOrganisms() ([]Organism, error) {
+	var err error
+	var organisms []Organism
+	err = db.Debug().Find(&organisms).Error
+	if err != nil {
+		return nil, err
+	}
+	return organisms, nil
 }
 
 func DeleteOrganismByID(uid uint32) (*Organism, error) {
@@ -53,13 +61,12 @@ func EditOrganismByID(organism Organism) (*Organism, error) {
 	return &organism, err
 }
 
-func CreateOrganism(organism Organism) (*Organism, error) {
+func CreateOrganism(organism *Organism) error {
 	var err error
-	err = db.Debug().Model(Organism{}).Create(organism).Error
+	err = db.Debug().Create(organism).Error
 
 	if err != nil {
-		return &Organism{}, err
+		return err
 	}
-
-	return &organism, err
+	return nil
 }
