@@ -25,6 +25,16 @@ func FindRecipientsListByID(uid uint32) (*RecipientsList, error) {
 	return &recipientList, err
 }
 
+func FindRecipientsList() ([]RecipientsList, error) {
+	var err error
+	var recipientsList []RecipientsList
+	err = db.Debug().Find(&recipientsList).Error
+	if err != nil {
+		return nil, err
+	}
+	return recipientsList, nil
+}
+
 func DeleteRecipientsListByID(uid uint32) (*RecipientsList, error) {
 	var err error
 	var recipientList RecipientsList

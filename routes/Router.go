@@ -25,6 +25,9 @@ func SetupRouter(router *gin.Engine) {
 	router.POST("/campaigns", controllers.CreateCampaign)
 	router.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
 
+	router.GET("/groups", controllers.GetRecipientList)
+	router.POST("/groups", controllers.CreateRecipientsList)
+
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
 	})
