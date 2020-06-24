@@ -2,10 +2,8 @@ package services
 
 import (
 	"fmt"
-	"github.com/JackMaarek/spiderMail/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"os"
 	"strings"
 	"time"
@@ -61,21 +59,4 @@ func TokenValid(c *gin.Context) error {
 		return err
 	}
 	return nil
-}
-
-func SignIn(email string, password string) (string, error) {
-
-	var err error
-
-	var user *models.User
-
-	user, err = models.FindUserByEmail(email)
-	if err != nil {
-		return "", err
-	}
-	err = models.VerifyPassword(user.Password, password)
-	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return "", err
-	}
-	return CreateToken(user.ID)
 }

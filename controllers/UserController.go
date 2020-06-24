@@ -5,17 +5,13 @@ import (
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
-func UpdateUser(id string, c *gin.Context){
-	userId , converr := strconv.ParseUint(id, 10, 32)
-	if converr != nil {
-		c.JSON(http.StatusUnprocessableEntity, converr.Error())
-		return
-	}
+func UpdateUser(c *gin.Context){
+	// Get id and converts it
+	id := convertStringToInt(c.Param("id"))
 
-	user, findError := models.FindUserByID(userId)
+	user, findError := models.FindUserByID(id)
 	if findError != nil {
 		c.JSON(http.StatusUnprocessableEntity, findError.Error())
 		return
@@ -25,13 +21,7 @@ func UpdateUser(id string, c *gin.Context){
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	var err = models.ValidateUser(*user,"update")
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
-		return
-	}
-	fmt.Println(user)
-	userUpdated, err := models.EditUser(user)
+	userUpdated, err := models.EditUserByID(user)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -41,21 +31,16 @@ func UpdateUser(id string, c *gin.Context){
 	c.JSON(http.StatusOK, "User has been updated: " + userUpdated.Name + userUpdated.Email)
 }
 
-func DeleteUser(id string, c *gin.Context) {
-	userId, converr := strconv.ParseUint(id, 10, 32)
-	if converr != nil {
-		c.JSON(http.StatusUnprocessableEntity, converr.Error())
-		return
-	}
-	user, findError := models.FindUserByID(userId)
-	if findError != nil {
-		c.JSON(http.StatusUnprocessableEntity, findError.Error())
-		return
-	}
-	_, deleteErr := models.DeleteSingleUser(user)
-	if deleteErr != nil {
-		c.JSON(http.StatusUnprocessableEntity, deleteErr.Error())
-		return
+func DeleteUser(c *gin.Context) {
+	// Get id and converts it
+	id := convertStringToInt(c.Param("id"))
+
+	var err error
+
+	_, err = models.DeleteUserByID(id)
+
+	if err != nil{
+		fmt.Println("Error: ",err)
 	}
 
 	c.JSON(http.StatusOK, "User has been deleted")
