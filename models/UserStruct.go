@@ -105,6 +105,16 @@ func EditUser(user *User) (*User, error) {
 	return user, nil
 }
 
+func DeleteSingleUser(user *User) (int64, error) {
+
+	db = db.Debug().Delete(user)
+
+	if db.Error != nil {
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}
+
 func FindAllUsers() (*[]User, error) {
 	var err error
 	users := []User{}

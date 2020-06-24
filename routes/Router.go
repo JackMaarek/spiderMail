@@ -13,6 +13,10 @@ func SetupRouter(router *gin.Engine){
 		id := c.Param("id")
 		controllers.UpdateUser(id, c)
 	})
+	router.DELETE("/user/delete/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		controllers.DeleteUser(id, c)
+	})
 
 	router.GET("/organisms", controllers.GetOrganisms)
 	router.GET("/organisms/:id", controllers.GetOrganismById)
