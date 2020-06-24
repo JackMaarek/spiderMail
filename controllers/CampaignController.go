@@ -1,26 +1,68 @@
 package controllers
 
-/*var campaign = models.Campaign {
-	ID:			1,
-	Name:       "Advertisment program.",
-	DateCreated: time.Now(),
-	User:        User,
-	Subject:     "Welcome to our fidelity program!",
-	Content: 	"<h1>Welcome here !</h1>",
-	Attachments: nil,
-	Recipients:  []
+import (
+	"github.com/JackMaarek/spiderMail/models"
+	"github.com/JackMaarek/spiderMail/services"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"fmt"
+)
+
+func GetCampaigns(c *gin.Context) {
+	var campaigns []models.Campaign
+	var err error
+	campaigns, err = models.FindCampaigns()
+
+	if err != nil {
+		fmt.Println("Error: ",err)
 	}
 
-func GetAllCampaigns(c *gin.Context) {
-	var u models.User
-	if err := c.ShouldBindJSON(&u); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
+	c.JSON(http.StatusOK, campaigns)
+}
+
+func GetCampaignById(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var err error
+	var campaign models.Campaign
+
+	campaign, err = models.FindCampaignByID(id)
+
+	if err != nil {
+		fmt.Println("Error: ",err)
+	}
+
+	c.JSON(http.StatusOK, campaign)
+}
+
+func GetCampaignsByOrganismId(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var err error
+	var campaigns []models.Campaign
+
+	campaigns, err = models.FindCampaignsByOrganismID(id)
+
+	if err != nil {
+		fmt.Println("Error: ",err)
+	}
+
+	c.JSON(http.StatusOK, campaigns)
+}
+
+func CreateCampaign(c *gin.Context) {
+	var campaign models.Campaign
+	if err := c.ShouldBindJSON(&campaign); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	//compare the user from the request, with the one we defined:
-	if user.Email != u.Email || user.Password != u.Password {
-		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
-		return
+
+	err := models.CreateCampaign(&campaign)
+	if err != nil {
+		fmt.Println("Error: ", err)
 	}
-	c.JSON(http.StatusOK, token)
-}*/
+
+	c.JSON(http.StatusCreated, campaign)
+}

@@ -24,6 +24,11 @@ func SetupRouter(router *gin.Engine){
 	router.DELETE("/organisms/:id", controllers.DeleteOrganismById)
 	router.PUT("/organisms/:id", controllers.EditOrganismById)
 
+	router.GET("/campaigns", controllers.GetCampaigns)
+	router.GET("/campaigns/:id", controllers.GetCampaignById)
+	router.POST("/campaigns", controllers.CreateCampaign)
+	router.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
+
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
 	})
