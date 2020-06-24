@@ -1,4 +1,4 @@
-package Services
+package main
 
 import (
 	"github.com/dgrijalva/jwt-go"

@@ -1,4 +1,4 @@
-package Services
+package main
 
 import (
 	"github.com/caarlos0/env/v6"

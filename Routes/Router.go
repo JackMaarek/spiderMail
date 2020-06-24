@@ -1,10 +1,10 @@
 package Routes
 
 import (
+	"github.com/JackMaarek/spiderMail/Controllers"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"github.com/JackMaarek/spiderMail/Controllers"
 )
 
 var (
