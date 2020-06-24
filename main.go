@@ -21,8 +21,10 @@ func main() {
 	if err := env.Parse(&cfg); err != nil {
 		log.Fatal(err)
 	}
+	// Database initialization
 	models.InitializeDb(cfg.DbUser, cfg.DbPassword, cfg.DbHost, cfg.DbName, cfg.DbPort)
-	Models.MakeMigrations()
+	models.MakeMigrations()
+
 	router := gin.Default()
 	routes.SetupRouter(router)
 

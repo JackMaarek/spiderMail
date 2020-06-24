@@ -1,19 +1,15 @@
 package models
 
 import (
-	"github.com/JackMaarek/spiderMail/Database"
 	"github.com/jinzhu/gorm"
 )
 
 type Recipient struct {
-	Name string `gorm:"size:255"`
+	Name  string `gorm:"size:255"`
 	Email string `gorm:"size:255"`
 }
 
-
 func GetRecipients() *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var recipients Recipient
 	all_recipients := db.Find(&recipients)
@@ -26,8 +22,6 @@ func GetRecipients() *gorm.DB {
 }
 
 func GetRecipientById(id int) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var recipient Recipient
 	res_recipient := db.First(&recipient, id)
@@ -39,8 +33,6 @@ func GetRecipientById(id int) *gorm.DB {
 }
 
 func CreateRecipient(recipient Recipient) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	res_recipient := db.Create(recipient)
 	if res_recipient.Error != nil {
@@ -51,8 +43,6 @@ func CreateRecipient(recipient Recipient) *gorm.DB {
 }
 
 func DeleteRecipientbyId(id int) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var recipient Recipient
 	response := db.Delete(&recipient, id)

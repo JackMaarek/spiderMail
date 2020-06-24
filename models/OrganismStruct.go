@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/JackMaarek/spiderMail/Database"
 	"github.com/jinzhu/gorm"
 )
 
@@ -11,8 +10,6 @@ type Organism struct {
 }
 
 func GetOrganisms() *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var organisms []Organism
 	all_organisms := db.Find(&organisms)
@@ -24,8 +21,6 @@ func GetOrganisms() *gorm.DB {
 }
 
 func GetOrganismById(id int) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var organism Organism
 	res_organism := db.First(&organism, id)
@@ -37,8 +32,6 @@ func GetOrganismById(id int) *gorm.DB {
 }
 
 func CreateOrganism(organism Organism) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	res_organism := db.Create(organism)
 	if res_organism.Error != nil {
@@ -49,8 +42,6 @@ func CreateOrganism(organism Organism) *gorm.DB {
 }
 
 func DeleteOrganismbyId(id int) *gorm.DB {
-	db := Database.Connect()
-	defer db.Close()
 
 	var organism Organism
 	response := db.Delete(&organism, id)
