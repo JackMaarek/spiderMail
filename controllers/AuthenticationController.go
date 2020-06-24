@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
@@ -18,7 +19,8 @@ func Registration(c *gin.Context){
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	userCreated, err := models.SaveUser()
+	fmt.Println(user)
+	userCreated, err := models.CreateUser(&user)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
