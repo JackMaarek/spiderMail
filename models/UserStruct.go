@@ -9,10 +9,10 @@ import (
 )
 
 type User struct {
-	ID uint64         `gorm:"primary_key"`
-	Name string       `gorm:"size:255"`
-	Password string   `gorm:"size:255"`
-	Email string      `gorm:"size:255"`
+	ID         uint64 `gorm:"primary_key"`
+	Name       string `gorm:"size:255"`
+	Password   string `gorm:"size:255"`
+	Email      string `gorm:"size:255"`
 	OrganismId uint64
 }
 
@@ -95,9 +95,9 @@ func EditUser(user *User) (*User, error) {
 	var err error
 	var createdUser = db.Model(&user).Updates(
 		map[string]interface{}{
-			"password":  user.Password,
-			"name":  	 user.Name,
-			"email":     user.Email,
+			"password": user.Password,
+			"name":     user.Name,
+			"email":    user.Email,
 		})
 	if createdUser.Error != nil {
 		return &User{}, err
@@ -138,7 +138,7 @@ func FindUserByID(uid uint64) (*User, error) {
 	return &user, err
 }
 
-func FindUserByEmail(email string) (*User, error)  {
+func FindUserByEmail(email string) (*User, error) {
 	var err error
 	var user User
 	err = db.Debug().Model(User{}).Where("email = ?", email).Take(&user).Error

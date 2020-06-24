@@ -1,19 +1,19 @@
 package models
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
 	"time"
-	"errors"
 )
 
 type Campaign struct {
-	ID          uint64    `gorm:"primary_key"`
-	Name        string    `gorm:"size:255"`
-	DateCreated time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
-	OrganismId uint64
-	Subject     string    `gorm:"size:255"`
-	Content 	string 	  `gorm:"size:1023"`
-	RecipientsListId  uint64
+	ID               uint64    `gorm:"primary_key"`
+	Name             string    `gorm:"size:255"`
+	DateCreated      time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
+	OrganismId       uint64
+	Subject          string `gorm:"size:255"`
+	Content          string `gorm:"size:1023"`
+	RecipientsListId uint64
 }
 
 func FindCampaigns() ([]Campaign, error) {

@@ -14,7 +14,7 @@ func GetOrganisms(c *gin.Context) {
 	organisms, err = models.FindOrganisms()
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, organisms)
@@ -30,7 +30,7 @@ func GetOrganismById(c *gin.Context) {
 	organism, err = models.FindOrganismByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, organism)
@@ -87,4 +87,3 @@ func CreateOrganism(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, organism)
 }
-

@@ -8,8 +8,8 @@ import (
 	"strconv"
 )
 
-func UpdateUser(id string, c *gin.Context){
-	userId , converr := strconv.ParseUint(id, 10, 32)
+func UpdateUser(id string, c *gin.Context) {
+	userId, converr := strconv.ParseUint(id, 10, 32)
 	if converr != nil {
 		c.JSON(http.StatusUnprocessableEntity, converr.Error())
 		return
@@ -25,7 +25,7 @@ func UpdateUser(id string, c *gin.Context){
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	var err = models.ValidateUser(*user,"update")
+	var err = models.ValidateUser(*user, "update")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
@@ -38,7 +38,7 @@ func UpdateUser(id string, c *gin.Context){
 		return
 	}
 
-	c.JSON(http.StatusOK, "User has been updated: " + userUpdated.Name + userUpdated.Email)
+	c.JSON(http.StatusOK, "User has been updated: "+userUpdated.Name+userUpdated.Email)
 }
 
 func DeleteUser(id string, c *gin.Context) {

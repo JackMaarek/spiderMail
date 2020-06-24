@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func SetupRouter(router *gin.Engine){
+func SetupRouter(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 	router.POST("/registration", controllers.Registration)
 	router.PUT("/user/update/:id", func(c *gin.Context) {

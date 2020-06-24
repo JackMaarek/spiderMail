@@ -1,12 +1,12 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"errors"
+	"github.com/jinzhu/gorm"
 )
 
 type Organism struct {
-	ID uint64   `gorm:"primary_key"`
+	ID   uint64 `gorm:"primary_key"`
 	Name string `gorm:"size:255"`
 }
 

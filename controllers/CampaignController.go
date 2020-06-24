@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"fmt"
 )
 
 func GetCampaigns(c *gin.Context) {
@@ -14,7 +14,7 @@ func GetCampaigns(c *gin.Context) {
 	campaigns, err = models.FindCampaigns()
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, campaigns)
@@ -30,7 +30,7 @@ func GetCampaignById(c *gin.Context) {
 	campaign, err = models.FindCampaignByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, campaign)
@@ -46,7 +46,7 @@ func GetCampaignsByOrganismId(c *gin.Context) {
 	campaigns, err = models.FindCampaignsByOrganismID(id)
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, campaigns)
