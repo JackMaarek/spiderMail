@@ -9,7 +9,6 @@ import (
 )
 
 type User struct {
-	gorm.Model
 	ID uint64         `gorm:"primary_key"`
 	Name string       `gorm:"size:255"`
 	Password string   `gorm:"size:255"`
