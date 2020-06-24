@@ -40,15 +40,15 @@ func DeleteOrganismById(c *gin.Context) {
 	id := convertStringToInt(c.Param("id"))
 
 	var err error
-	var organism models.Organism
-
-	organism, err = models.DeleteOrganismByID(id)
+	err = models.DeleteOrganismByID(id)
 
 	if err != nil{
-		fmt.Println("Error: ",err)
+		c.JSON(http.StatusNotModified, "")
+		return
 	}
 
-	c.JSON(http.StatusOK, organism)
+	message := "Organism with id " + c.Param("id") + " have been deleted."
+	c.JSON(http.StatusOK, message)
 }
 
 func CreateOrganism(c *gin.Context) {
@@ -65,3 +65,4 @@ func CreateOrganism(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, organism)
 }
+
