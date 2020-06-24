@@ -49,18 +49,19 @@ func DeleteOrganismByID(id uint64) error {
 	return nil
 }
 
-func EditOrganismByID(organism Organism) (*Organism, error) {
+func EditOrganismByID(organism *Organism, id uint64) error {
 	var err error
-	uid := organism.ID
-
-	err = db.Debug().Model(Campaign{}).Where("id = ?", uid).Save(&organism).Take(&organism).Error
-	if err != nil {
-		return &Organism{}, err
-	}
+	var old Organism
+	err = db.Debug().Where("id = ?", id).First(&old).Error
 	if gorm.IsRecordNotFoundError(err) {
-		return &Organism{}, errors.New("Organism Not Found")
+		return errors.New("Organism Not Found")
 	}
-	return &organism, err
+	organism.ID = id
+	err = db.Debug().Save(&organism).Error
+	if err != nil {
+		return errors.New("Could'nt update organism")
+	}
+	return nil
 }
 
 func CreateOrganism(organism *Organism) error {

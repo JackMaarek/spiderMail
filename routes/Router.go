@@ -22,6 +22,7 @@ func SetupRouter(router *gin.Engine){
 	router.GET("/organisms/:id", controllers.GetOrganismById)
 	router.POST("/organisms", controllers.CreateOrganism)
 	router.DELETE("/organisms/:id", controllers.DeleteOrganismById)
+	router.PUT("/organisms/:id", controllers.EditOrganismById)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
