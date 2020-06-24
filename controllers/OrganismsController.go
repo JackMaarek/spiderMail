@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
+	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,7 +14,7 @@ func GetOrganisms(c *gin.Context) {
 	organisms, err = models.FindOrganisms()
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, organisms)
@@ -21,7 +22,7 @@ func GetOrganisms(c *gin.Context) {
 
 func GetOrganismById(c *gin.Context) {
 	// Get id and converts it
-	id := convertStringToInt(c.Param("id"))
+	id := services.ConvertStringToInt(c.Param("id"))
 
 	var err error
 	var organism models.Organism
@@ -29,7 +30,7 @@ func GetOrganismById(c *gin.Context) {
 	organism, err = models.FindOrganismByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ",err)
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, organism)
@@ -37,7 +38,7 @@ func GetOrganismById(c *gin.Context) {
 
 func DeleteOrganismById(c *gin.Context) {
 	// Get id and converts it
-	id := convertStringToInt(c.Param("id"))
+	id := services.ConvertStringToInt(c.Param("id"))
 
 	var err error
 	err = models.DeleteOrganismByID(id)
@@ -53,7 +54,7 @@ func DeleteOrganismById(c *gin.Context) {
 
 func EditOrganismById(c *gin.Context) {
 	// Get id and converts it
-	id := convertStringToInt(c.Param("id"))
+	id := services.ConvertStringToInt(c.Param("id"))
 
 	var organism models.Organism
 	if err := c.ShouldBindJSON(&organism); err != nil {
@@ -86,4 +87,3 @@ func CreateOrganism(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, organism)
 }
-

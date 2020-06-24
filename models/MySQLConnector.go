@@ -9,7 +9,7 @@ import (
 
 var db *gorm.DB
 
-func InitializeDb (user string, password string, host string, name string, port int) {
+func InitializeDb(user string, password string, host string, name string, port int) {
 	dbUrl := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, port, name)
 	var tmpDb, err = gorm.Open("mysql", dbUrl)
 	if err != nil {

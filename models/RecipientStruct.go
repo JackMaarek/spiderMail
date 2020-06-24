@@ -7,9 +7,9 @@ import (
 )
 
 type Recipient struct {
-	ID uint64 `gorm: "primary_key"`
-	Name  string `gorm:"size:255"`
-	Email string `gorm:"size:255"`
+	ID              uint64            `gorm: "primary_key"`
+	Name            string            `gorm:"size:255"`
+	Email           string            `gorm:"size:255"`
 	RecipientsLists []*RecipientsList `gorm:"many2many:mail_lists;"`
 }
 
