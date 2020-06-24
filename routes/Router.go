@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func SetupRouter(router *gin.Engine){
+func SetupRouter(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 	router.POST("/registration", controllers.Registration)
 	router.PUT("/user/update/:id", func(c *gin.Context) {
@@ -17,6 +17,9 @@ func SetupRouter(router *gin.Engine){
 	router.GET("/organisms", controllers.GetOrganisms)
 	router.GET("/organisms/:id", controllers.GetOrganismById)
 	router.POST("/organisms", controllers.CreateOrganism)
+
+	router.GET("/groups", controllers.GetRecipientList)
+	router.POST("/groups", controllers.CreateRecipientsList)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})

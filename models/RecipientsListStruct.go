@@ -1,17 +1,16 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"errors"
+	"github.com/jinzhu/gorm"
 )
 
 type RecipientsList struct {
-	ID uint64 `gorm: "primary_key"`
-	Name  string `gorm:"size:255"`
+	ID         uint64       `gorm: "primary_key"`
+	Name       string       `gorm:"size:255"`
 	Recipients []*Recipient `gorm:"many2many:mail_lists;"`
 	OrganismId uint64
 }
-
 
 func FindRecipientsListByID(uid uint32) (*RecipientsList, error) {
 	var err error
@@ -24,6 +23,16 @@ func FindRecipientsListByID(uid uint32) (*RecipientsList, error) {
 		return &RecipientsList{}, errors.New("Recipients List Not Found")
 	}
 	return &recipientList, err
+}
+
+func FindRecipientsList() ([]RecipientsList, error) {
+	var err error
+	var recipientsList []RecipientsList
+	err = db.Debug().Find(&recipientsList).Error
+	if err != nil {
+		return nil, err
+	}
+	return recipientsList, nil
 }
 
 func DeleteRecipientsListByID(uid uint32) (*RecipientsList, error) {
