@@ -33,18 +33,18 @@ func FindOrganisms() ([]Organism, error) {
 	return organisms, nil
 }
 
-func DeleteOrganismByID(uid uint32) (*Organism, error) {
+func DeleteOrganismByID(id uint64) (Organism, error) {
 	var err error
 	var organism Organism
 
-	err = db.Debug().Model(Organism{}).Where("id = ?", uid).Delete(&organism).Error
+	err = db.Debug().Delete(&organism, id).Error
 	if err != nil {
-		return &Organism{}, err
+		return Organism{}, err
 	}
 	if gorm.IsRecordNotFoundError(err) {
-		return &Organism{}, errors.New("Organism Not Found")
+		return Organism{}, errors.New("Organism Not Found")
 	}
-	return &organism, err
+	return organism, err
 }
 
 func EditOrganismByID(organism Organism) (*Organism, error) {
