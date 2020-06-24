@@ -9,10 +9,10 @@ import (
 )
 
 type User struct {
-	ID         uint64 `gorm:"primary_key"`
-	Name       string `gorm:"size:255"`
-	Password   string `gorm:"size:255"`
-	Email      string `gorm:"size:255"`
+	ID uint64         `gorm:"primary_key"`
+	Name string       `gorm:"size:255"`
+	Password string   `gorm:"size:255"`
+	Email string      `gorm:"size:255"`
 	OrganismId uint64
 }
 
@@ -24,8 +24,7 @@ func VerifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-func BeforeSave() error {
-	var user User
+func BeforeSave(user *User) error {
 	hashedPassword, err := Hash(user.Password)
 	if err != nil {
 		return err
@@ -34,7 +33,7 @@ func BeforeSave() error {
 	return nil
 }
 
-func ValidateUser(user User, action string) error {
+func ValidateUser(user *User, action string) error {
 	switch strings.ToLower(action) {
 	case "update":
 		if user.Name == "" {
@@ -83,6 +82,17 @@ func ValidateUser(user User, action string) error {
 func CreateUser(user *User) (*User, error) {
 
 	var err error
+
+	err = ValidateUser(user,"update")
+	if err != nil {
+		return &User{}, err
+	}
+
+	err = BeforeSave(user)
+	if err != nil {
+		return &User{}, err
+	}
+
 	err = db.Debug().Create(&user).Error
 	if err != nil {
 		return &User{}, err
@@ -90,29 +100,37 @@ func CreateUser(user *User) (*User, error) {
 	return user, nil
 }
 
-func EditUser(user *User) (*User, error) {
-
+func EditUserByID(user *User) (*User, error) {
 	var err error
-	var createdUser = db.Model(&user).Updates(
-		map[string]interface{}{
-			"password": user.Password,
-			"name":     user.Name,
-			"email":    user.Email,
-		})
-	if createdUser.Error != nil {
+
+	err = ValidateUser(user,"update")
+	if err != nil {
 		return &User{}, err
 	}
-	return user, nil
+
+	err = db.Debug().Save(&user).Take(&user).Error
+	if err != nil {
+		return &User{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &User{}, errors.New("User Not Found")
+	}
+	return user, err
 }
 
-func DeleteSingleUser(user *User) (int64, error) {
+func DeleteUserByID(id uint64) (User, error) {
 
-	db = db.Debug().Delete(user)
+	var err error
+	var user User
 
-	if db.Error != nil {
-		return 0, db.Error
+	err = db.Debug().Delete(&user, id).Error
+	if err != nil {
+		return User{}, err
 	}
-	return db.RowsAffected, nil
+	if gorm.IsRecordNotFoundError(err) {
+		return User{}, errors.New("User Not Found")
+	}
+	return user, err
 }
 
 func FindAllUsers() (*[]User, error) {
@@ -138,7 +156,7 @@ func FindUserByID(uid uint64) (*User, error) {
 	return &user, err
 }
 
-func FindUserByEmail(email string) (*User, error) {
+func FindUserByEmail(email string) (*User, error)  {
 	var err error
 	var user User
 	err = db.Debug().Model(User{}).Where("email = ?", email).Take(&user).Error
