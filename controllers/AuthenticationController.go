@@ -27,7 +27,7 @@ func Registration(c *gin.Context){
 		return
 	}
 
-	c.JSON(http.StatusCreated, "User has been created:" + userCreated.Email)
+	c.JSON(http.StatusCreated, "User has been created:" + userCreated.Name + userCreated.Email)
 }
 
 func Login(c *gin.Context) {

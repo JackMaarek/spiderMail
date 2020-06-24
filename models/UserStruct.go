@@ -90,6 +90,31 @@ func CreateUser(user *User) (*User, error) {
 	return user, nil
 }
 
+func EditUser(user *User) (*User, error) {
+
+	var err error
+	var createdUser = db.Model(&user).Updates(
+		map[string]interface{}{
+			"password":  user.Password,
+			"name":  	 user.Name,
+			"email":     user.Email,
+		})
+	if createdUser.Error != nil {
+		return &User{}, err
+	}
+	return user, nil
+}
+
+func DeleteSingleUser(user *User) (int64, error) {
+
+	db = db.Debug().Delete(user)
+
+	if db.Error != nil {
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}
+
 func FindAllUsers() (*[]User, error) {
 	var err error
 	users := []User{}
@@ -100,7 +125,7 @@ func FindAllUsers() (*[]User, error) {
 	return &users, err
 }
 
-func FindUserByID(uid uint32) (*User, error) {
+func FindUserByID(uid uint64) (*User, error) {
 	var err error
 	var user User
 	err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&user).Error
