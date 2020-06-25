@@ -26,6 +26,7 @@ func SetupRouter(router *gin.Engine) {
 	router.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
 
 	router.GET("/groups", controllers.GetRecipientList)
+	router.GET("/groups/:id", controllers.GetRecipientsListById)
 	router.POST("/groups", controllers.CreateRecipientsList)
 
 	router.GET("/", func(c *gin.Context) {

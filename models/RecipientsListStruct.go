@@ -12,17 +12,17 @@ type RecipientsList struct {
 	OrganismId uint64
 }
 
-func FindRecipientsListByID(uid uint32) (*RecipientsList, error) {
+func FindRecipientsListByID(uid uint32) (RecipientsList, error) {
 	var err error
-	var recipientList *RecipientsList
-	err = db.Debug().Model(RecipientsList{}).Where("id = ?", uid).Take(&recipientList).Error
+	var recipientList RecipientsList
+	err = db.Debug().Model(&RecipientsList{}).Where("id = ?", uid).Take(&recipientList).Error
 	if err != nil {
-		return nil, err
+		return RecipientsList{}, err
 	}
 	if gorm.IsRecordNotFoundError(err) {
-		return &RecipientsList{}, errors.New("Recipients List Not Found")
+		return RecipientsList{}, errors.New("Recipients List Not Found")
 	}
-	return nil, err
+	return recipientList, nil
 }
 
 func FindRecipientsList() ([]RecipientsList, error) {
