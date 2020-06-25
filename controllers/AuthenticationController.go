@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-func Registration(c *gin.Context){
+func Registration(c *gin.Context) {
 	user := models.User{}
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	var err = models.ValidateUser(&user,"")
+	var err = models.ValidateUser(&user, "")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
@@ -26,13 +26,13 @@ func Registration(c *gin.Context){
 		return
 	}
 	var tokenCreated *models.Token
-	tokenCreated, err = models.CreateUserToken(userCreated)
+	tokenCreated, err = models.CreateTokenFromUser(userCreated)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	fmt.Println(tokenCreated)
-	c.JSON(http.StatusCreated, "User has been created:" + userCreated.Name + userCreated.Email)
+	c.JSON(http.StatusCreated, "User has been created:"+userCreated.Name+userCreated.Email)
 }
 
 func Login(c *gin.Context) {
@@ -42,7 +42,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	err := models.ValidateUser(&u,"login")
+	err := models.ValidateUser(&u, "login")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Please provide valid login details")
 		return
@@ -57,7 +57,7 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, "Successfully signed in.")
 }
 
-func SignIn(email string, password string)  error {
+func SignIn(email string, password string) error {
 
 	var err error
 

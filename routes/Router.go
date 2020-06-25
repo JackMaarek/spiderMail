@@ -2,31 +2,38 @@ package routes
 
 import (
 	"github.com/JackMaarek/spiderMail/controllers"
+	"github.com/JackMaarek/spiderMail/midlewares"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func SetupRouter(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 	router.POST("/registration", controllers.Registration)
-	router.PUT("/user/update/:id", controllers.UpdateUser)
-	router.DELETE("/user/delete/:id", controllers.DeleteUser)
-	router.GET("/organisms/:id/users", controllers.GetUsersByOrganism)
 
-	router.GET("/organisms", controllers.GetOrganisms)
-	router.GET("/organisms/:id", controllers.GetOrganismById)
-	router.POST("/organisms", controllers.CreateOrganism)
-	router.DELETE("/organisms/:id", controllers.DeleteOrganismById)
-	router.PUT("/organisms/:id", controllers.EditOrganismById)
+	authorized := router.Group("/")
+	authorized.Use(midlewares.CheckAuthorization)
+	{
+		authorized.PUT("/users/:id", controllers.UpdateUser)
+		authorized.DELETE("/users/:id", controllers.DeleteUser)
+		authorized.GET("/organisms/:id/users", controllers.GetUsersByOrganism)
+		authorized.GET("/organisms", controllers.GetOrganisms)
+		authorized.GET("/organisms/:id", controllers.GetOrganismById)
+		authorized.POST("/organisms", controllers.CreateOrganism)
+		authorized.DELETE("/organisms/:id", controllers.DeleteOrganismById)
+		authorized.PUT("/organisms/:id", controllers.EditOrganismById)
 
-	router.GET("/campaigns", controllers.GetCampaigns)
-	router.GET("/campaigns/:id", controllers.GetCampaignById)
-	router.PUT("/campaigns/:id", controllers.EditCampaignById)
-	router.DELETE("/campaigns/:id", controllers.DeleteCampaignById)
-	router.POST("/campaigns", controllers.CreateCampaign)
-	router.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
+		authorized.GET("/campaigns", controllers.GetCampaigns)
+		authorized.GET("/campaigns/:id", controllers.GetCampaignById)
+		authorized.PUT("/campaigns/:id", controllers.EditCampaignById)
+		authorized.DELETE("/campaigns/:id", controllers.DeleteCampaignById)
+		authorized.POST("/campaigns", controllers.CreateCampaign)
+		authorized.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
-	})
+		authorized.GET("/groups", controllers.GetRecipientList)
+		authorized.GET("/groups/:id", controllers.GetRecipientsListById)
+		authorized.POST("/groups", controllers.CreateRecipientsList)
+		authorized.PUT("/groups/:id", controllers.EditRecipientsListById)
+		authorized.DELETE("/groups/:id", controllers.DeleteRecipientsListById)
+
+	}
 }

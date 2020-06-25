@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func UpdateUser(c *gin.Context){
+func UpdateUser(c *gin.Context) {
 	// Get id and converts it
 	id := services.ConvertStringToInt(c.Param("id"))
 
@@ -29,7 +29,7 @@ func UpdateUser(c *gin.Context){
 		return
 	}
 
-	c.JSON(http.StatusOK, "User has been updated: " + userUpdated.Name + userUpdated.Email)
+	c.JSON(http.StatusOK, "User has been updated: "+userUpdated.Name+userUpdated.Email)
 }
 
 func GetUsersByOrganism(c *gin.Context) {
@@ -56,8 +56,8 @@ func DeleteUser(c *gin.Context) {
 
 	_, err = models.DeleteUserByID(id)
 
-	if err != nil{
-		fmt.Println("Error: ",err)
+	if err != nil {
+		fmt.Println("Error: ", err)
 	}
 
 	c.JSON(http.StatusOK, "User has been deleted")

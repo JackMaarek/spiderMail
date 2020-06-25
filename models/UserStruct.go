@@ -13,7 +13,7 @@ type User struct {
 	Name string       `gorm:"size:255"`
 	Password string   `gorm:"size:255"`
 	Email string      `gorm:"size:255"`
-	Admin bool
+	Admin bool		  `gorm:"default: false"`
 	OrganismId uint64
 }
 
@@ -84,7 +84,7 @@ func CreateUser(user *User) (*User, error) {
 
 	var err error
 
-	err = ValidateUser(user,"update")
+	err = ValidateUser(user, "update")
 	if err != nil {
 		return &User{}, err
 	}
@@ -114,7 +114,7 @@ func FindUsersByOrganismID(id uint64) ([]User, error) {
 func EditUserByID(user *User) (*User, error) {
 	var err error
 
-	err = ValidateUser(user,"update")
+	err = ValidateUser(user, "update")
 	if err != nil {
 		return &User{}, err
 	}
@@ -167,7 +167,7 @@ func FindUserByID(uid uint64) (*User, error) {
 	return &user, err
 }
 
-func FindUserByEmail(email string) (*User, error)  {
+func FindUserByEmail(email string) (*User, error) {
 	var err error
 	var user User
 	err = db.Debug().Model(User{}).Where("email = ?", email).Take(&user).Error
