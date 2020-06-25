@@ -1,19 +1,18 @@
 package midlewares
 
 import (
-	"errors"
-	"fmt"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func CheckAuthorization(c *gin.Context) error {
+func CheckAuthorization(c *gin.Context) {
 	var err error
 	err = services.TokenValid(c)
-	fmt.Println(err)
 	if err != nil {
-		return errors.New("Not Authorized")
-
+		c.AbortWithStatusJSON(http.StatusUnauthorized, "Unauthorized")
+		return
 	}
-	return nil
+
+	c.Next()
 }
