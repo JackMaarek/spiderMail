@@ -41,7 +41,7 @@ func CreateToken(userId uint64) (string, error) {
 	return token, nil
 }
 
-func ExtractToken (c *gin.Context) string {
+func ExtractToken(c *gin.Context) string {
 	bearToken := c.GetHeader("Authorization")
 	//normally Authorization the_token_xxx
 	strArr := strings.Split(bearToken, " ")

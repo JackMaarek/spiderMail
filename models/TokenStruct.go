@@ -6,10 +6,10 @@ import (
 )
 
 type Token struct {
-	ID        uint64 `gorm:"primary_key"`
-	Token     string `gorm:"size:255"`
+	ID        uint64    `gorm:"primary_key"`
+	Token     string    `gorm:"size:255"`
 	ExpiresAt time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
-	Revoked   bool `gorm:"default:FALSE"`
+	Revoked   bool      `gorm:"default:FALSE"`
 	UserId    uint64
 }
 

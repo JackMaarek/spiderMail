@@ -2,20 +2,19 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/JackMaarek/spiderMail/midlewares"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
-func Registration(c *gin.Context){
+func Registration(c *gin.Context) {
 	user := models.User{}
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	var err = models.ValidateUser(&user,"")
+	var err = models.ValidateUser(&user, "")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
@@ -33,21 +32,17 @@ func Registration(c *gin.Context){
 		return
 	}
 	fmt.Println(tokenCreated)
-	c.JSON(http.StatusCreated, "User has been created:" + userCreated.Name + userCreated.Email)
+	c.JSON(http.StatusCreated, "User has been created:"+userCreated.Name+userCreated.Email)
 }
 
 func Login(c *gin.Context) {
-	if err := midlewares.CheckAuthorization(c); err != nil {
-		c.JSON(http.StatusForbidden, err.Error())
-		return
-	}
 	var u models.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
 
-	err := models.ValidateUser(&u,"login")
+	err := models.ValidateUser(&u, "login")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Please provide valid login details")
 		return
@@ -62,7 +57,7 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, "Successfully signed in.")
 }
 
-func SignIn(email string, password string)  error {
+func SignIn(email string, password string) error {
 
 	var err error
 
