@@ -10,6 +10,7 @@ func SetupRouter(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 	router.POST("/registration", controllers.Registration)
 
+
 	authorized := router.Group("/")
 	authorized.Use(midlewares.CheckAuthorization)
 	{
