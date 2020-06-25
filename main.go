@@ -5,7 +5,9 @@ import (
 	"github.com/JackMaarek/spiderMail/routes"
 	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 	"log"
+	"time"
 )
 
 type config struct {
@@ -26,6 +28,16 @@ func main() {
 	models.MakeMigrations()
 
 	router := gin.Default()
+	router.Use(cors.Middleware(cors.Config{
+		Origins:        "*",
+		Methods:        "GET, PUT, POST, DELETE",
+		RequestHeaders: "Origin, Authorization, Content-Type",
+		ExposedHeaders: "",
+		MaxAge: 50 * time.Second,
+		Credentials: true,
+		ValidateHeaders: false,
+	}))
+
 	routes.SetupRouter(router)
 
 	log.Fatal(router.Run(":8080"))
