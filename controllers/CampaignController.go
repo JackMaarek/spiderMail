@@ -51,6 +51,42 @@ func GetCampaignsByOrganismId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, campaigns)
 }
+func DeleteCampaignById(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var err error
+	err = models.DeleteCampaignByID(id)
+
+	if err != nil {
+		c.JSON(http.StatusNotModified, "")
+		return
+	}
+
+	message := "Campaign with id " + c.Param("id") + " have been deleted."
+	c.JSON(http.StatusOK, message)
+}
+
+func EditCampaignById(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var campaign models.Campaign
+	if err := c.ShouldBindJSON(&campaign); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	var err error
+	err = models.EditCampaignByID(&campaign, id)
+
+	if err != nil {
+		c.JSON(http.StatusNotModified, "")
+		return
+	}
+
+	c.JSON(http.StatusOK, campaign)
+}
 
 func CreateCampaign(c *gin.Context) {
 	var campaign models.Campaign
