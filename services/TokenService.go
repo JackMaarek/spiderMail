@@ -2,23 +2,39 @@ package services
 
 import (
 	"fmt"
+	"github.com/JackMaarek/spiderMail/config"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"os"
+	"strconv"
 	"strings"
 	"time"
 )
 
+func CreateTokenExpireDate() (time.Duration, error) {
+	var err error
+	var key = config.GetDotEnvVariable("ACCESS_EXPIRES")
+	var durationInDays int64
+	var expireDate time.Duration
+	durationInDays, err = strconv.ParseInt(key, 10, 32)
+	if err != nil {
+		return 1, err
+	}
+	expireDate = time.Hour * 24 * time.Duration(durationInDays)
+	return expireDate, nil
+}
+
 func CreateToken(userId uint64) (string, error) {
 	var err error
 	//Creating Access Token
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
+	var expireDate time.Duration
+	expireDate, err = CreateTokenExpireDate()
 	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
+	atClaims["revoked"] = false
+	atClaims["admin"] = false
 	atClaims["user_id"] = userId
-	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	atClaims["exp"] = time.Now().Add(expireDate).UTC()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	token, err := at.SignedString([]byte(config.GetDotEnvVariable("ACCESS_SECRET")))
 	if err != nil {
 		return "", err
 	}
@@ -42,7 +58,7 @@ func VerifyToken(c *gin.Context) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("ACCESS_SECRET")), nil
+		return []byte(config.GetDotEnvVariable("ACCESS_SECRET")), nil
 	})
 	if err != nil {
 		return nil, err
@@ -55,6 +71,7 @@ func TokenValid(c *gin.Context) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(token.Claims.(jwt.Claims))
 	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 		return err
 	}

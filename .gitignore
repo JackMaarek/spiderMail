@@ -122,3 +122,6 @@ mysql_data/
 
 #Compiled version
 main
+
+#ENV
+.env

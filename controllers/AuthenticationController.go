@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/JackMaarek/spiderMail/midlewares"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -26,7 +27,7 @@ func Registration(c *gin.Context){
 		return
 	}
 	var tokenCreated *models.Token
-	tokenCreated, err = models.CreateUserToken(userCreated)
+	tokenCreated, err = models.CreateTokenFromUser(userCreated)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -36,6 +37,10 @@ func Registration(c *gin.Context){
 }
 
 func Login(c *gin.Context) {
+	if err := midlewares.CheckAuthorization(c); err != nil {
+		c.JSON(http.StatusForbidden, err.Error())
+		return
+	}
 	var u models.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
