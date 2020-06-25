@@ -63,13 +63,13 @@ func EditRecipientsListByID(recipientList RecipientsList) (*RecipientsList, erro
 	return &recipientList, err
 }
 
-func CreateRecipientList(recipientList RecipientsList) (*RecipientsList, error) {
+func CreateRecipientList(recipientList *RecipientsList) error {
 	var err error
 	err = db.Debug().Model(RecipientsList{}).Create(recipientList).Error
 
 	if err != nil {
-		return &RecipientsList{}, err
+		return err
 	}
 
-	return &recipientList, err
+	return nil
 }
