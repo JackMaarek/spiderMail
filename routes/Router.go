@@ -9,12 +9,7 @@ import (
 func SetupRouter(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 	router.POST("/registration", controllers.Registration)
-<<<<<<< HEAD
-=======
-	router.PUT("/users/:id", controllers.UpdateUser)
-	router.DELETE("/users/:id", controllers.DeleteUser)
-	router.GET("/organisms/:id/users", controllers.GetUsersByOrganism)
->>>>>>> Fix(backend): changed users/delete and /update routes
+
 
 	authorized := router.Group("/")
 	authorized.Use(midlewares.CheckAuthorization)
