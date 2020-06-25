@@ -3,13 +3,14 @@ package controllers
 import (
 	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
+	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func UpdateUser(c *gin.Context){
 	// Get id and converts it
-	id := convertStringToInt(c.Param("id"))
+	id := services.ConvertStringToInt(c.Param("id"))
 
 	user, findError := models.FindUserByID(id)
 	if findError != nil {
@@ -33,7 +34,7 @@ func UpdateUser(c *gin.Context){
 
 func DeleteUser(c *gin.Context) {
 	// Get id and converts it
-	id := convertStringToInt(c.Param("id"))
+	id := services.ConvertStringToInt(c.Param("id"))
 
 	var err error
 
