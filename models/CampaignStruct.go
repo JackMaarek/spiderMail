@@ -49,8 +49,41 @@ func FindCampaignByID(uid uint64) (Campaign, error) {
 	return campaign, nil
 }
 
+func DeleteCampaignByID(id uint64) error {
+	var err error
+	var campaign Campaign
+
+	err = db.Debug().First(&campaign, id).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return errors.New("Campaign Not Found")
+	}
+	err = db.Debug().Delete(&campaign, id).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func EditCampaignByID(campaign *Campaign, id uint64) error {
+	var err error
+	var old Campaign
+	err = db.Debug().Where("id = ?", id).First(&old).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return errors.New("Organism Not Found")
+	}
+	campaign.ID = id
+	campaign.DateCreated = old.DateCreated
+	err = db.Debug().Save(&campaign).Error
+	if err != nil {
+		return errors.New("Could'nt update organism")
+	}
+	return nil
+}
+
 func CreateCampaign(campaign *Campaign) error {
 	var err error
+	campaign.DateCreated = time.Now()
 	err = db.Debug().Create(campaign).Error
 
 	if err != nil {

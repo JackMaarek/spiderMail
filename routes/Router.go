@@ -20,6 +20,8 @@ func SetupRouter(router *gin.Engine) {
 
 	router.GET("/campaigns", controllers.GetCampaigns)
 	router.GET("/campaigns/:id", controllers.GetCampaignById)
+	router.PUT("/campaigns/:id", controllers.EditCampaignById)
+	router.DELETE("/campaigns/:id", controllers.DeleteCampaignById)
 	router.POST("/campaigns", controllers.CreateCampaign)
 	router.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
 
