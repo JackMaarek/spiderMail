@@ -13,6 +13,7 @@ type User struct {
 	Name string       `gorm:"size:255"`
 	Password string   `gorm:"size:255"`
 	Email string      `gorm:"size:255"`
+	Admin bool
 	OrganismId uint64
 }
 
@@ -98,6 +99,16 @@ func CreateUser(user *User) (*User, error) {
 		return &User{}, err
 	}
 	return user, nil
+}
+
+func FindUsersByOrganismID(id uint64) ([]User, error) {
+	var err error
+	var users []User
+	err = db.Debug().Where("organism_id = ?", id).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func EditUserByID(user *User) (*User, error) {

@@ -32,6 +32,22 @@ func UpdateUser(c *gin.Context){
 	c.JSON(http.StatusOK, "User has been updated: " + userUpdated.Name + userUpdated.Email)
 }
 
+func GetUsersByOrganism(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var err error
+	var users []models.User
+
+	users, err = models.FindUsersByOrganismID(id)
+
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+
+	c.JSON(http.StatusOK, users)
+}
+
 func DeleteUser(c *gin.Context) {
 	// Get id and converts it
 	id := services.ConvertStringToInt(c.Param("id"))
