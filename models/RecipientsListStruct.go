@@ -14,15 +14,15 @@ type RecipientsList struct {
 
 func FindRecipientsListByID(uid uint32) (*RecipientsList, error) {
 	var err error
-	var recipientList RecipientsList
+	var recipientList *RecipientsList
 	err = db.Debug().Model(RecipientsList{}).Where("id = ?", uid).Take(&recipientList).Error
 	if err != nil {
-		return &RecipientsList{}, err
+		return nil, err
 	}
 	if gorm.IsRecordNotFoundError(err) {
 		return &RecipientsList{}, errors.New("Recipients List Not Found")
 	}
-	return &recipientList, err
+	return nil, err
 }
 
 func FindRecipientsList() ([]RecipientsList, error) {
