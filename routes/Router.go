@@ -28,6 +28,8 @@ func SetupRouter(router *gin.Engine) {
 	router.GET("/groups", controllers.GetRecipientList)
 	router.GET("/groups/:id", controllers.GetRecipientsListById)
 	router.POST("/groups", controllers.CreateRecipientsList)
+	router.PUT("/groups/:id", controllers.EditRecipientsListById)
+	router.DELETE("/groups/:id", controllers.DeleteRecipientsListById)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})

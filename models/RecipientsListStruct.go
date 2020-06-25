@@ -35,32 +35,35 @@ func FindRecipientsList() ([]RecipientsList, error) {
 	return recipientsList, nil
 }
 
-func DeleteRecipientsListByID(uid uint32) (*RecipientsList, error) {
+func DeleteRecipientsListByID(id uint64) error {
 	var err error
 	var recipientList RecipientsList
 
-	err = db.Debug().Model(RecipientsList{}).Where("id = ?", uid).Delete(&recipientList).Error
-	if err != nil {
-		return &RecipientsList{}, err
-	}
+	err = db.Debug().First(&recipientList, id).Error
 	if gorm.IsRecordNotFoundError(err) {
-		return &RecipientsList{}, errors.New("Recipients List Not Found")
+		return errors.New("Recipient List Not Found")
 	}
-	return &recipientList, err
+	err = db.Debug().Delete(&recipientList, id).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func EditRecipientsListByID(recipientList RecipientsList) (*RecipientsList, error) {
+func EditRecipientsListByID(recipentList *RecipientsList, id uint64) error {
 	var err error
-	uid := recipientList.ID
-
-	err = db.Debug().Model(RecipientsList{}).Where("id = ?", uid).Save(&recipientList).Take(&recipientList).Error
-	if err != nil {
-		return &RecipientsList{}, err
-	}
+	var old RecipientsList
+	err = db.Debug().Where("id = ?", id).First(&old).Error
 	if gorm.IsRecordNotFoundError(err) {
-		return &RecipientsList{}, errors.New("Recipients List Not Found")
+		return errors.New("Recipient List Not Found")
 	}
-	return &recipientList, err
+	recipentList.ID = id
+	err = db.Debug().Save(&recipentList).Error
+	if err != nil {
+		return errors.New("Could'nt update recipient list")
+	}
+	return nil
 }
 
 func CreateRecipientList(recipientList *RecipientsList) error {
