@@ -11,17 +11,17 @@ type Config struct {
 	PROVIDER_SECRET string `env:"PROVIDER_SECRET"`
 }
 
-func main() {
+func CallMailerService() {
 	cfg := Config{}
 	env.Parse(&cfg)
 
 	var password string = os.Getenv("PROVIDER_SECRET")
 	var author string = os.Getenv("PROVIDER_KEY")
 
-	sendMail(author, password, "edwin.vautier@gmail.com", "Test", "<h1>Hello Edwin</h1><br><ul><li>1</li><li>2</li></ul>")
+	SendMail(author, password, "edwin.vautier@gmail.com", "Test", "<h1>Hello Edwin</h1><br><ul><li>1</li><li>2</li></ul>")
 }
 
-func sendMail(author string, password string, to string, subject string, body string) {
+func SendMail(author string, password string, to string, subject string, body string) {
 	mail := gomail.NewMessage()
 	mail.SetHeader("From", author)
 	mail.SetHeader("To", to)

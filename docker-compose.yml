@@ -46,11 +46,12 @@ services:
     ports:
       - '8088:8088'
     volumes:
-      - './rabbitmq/:/go/src/'
-      - './services/MailerService.go:/go/src/services/MailerService.go'
-      - './models/:/go/src/models/'
+      - './rabbitmq/:/src/github.com/JackMaarek/spiderMail/'
+      - './services/MailerService.go:/src/github.com/JackMaarek/spiderMail/services/MailerService.go'
+      - './models/:/src/github.com/JackMaarek/spiderMail/models/'
+      - './go.mod:/src/github.com/JackMaarek/spiderMail/go.mod'
 
-    command: go run src/main.go
+    command: go run /src/github.com/JackMaarek/spiderMail/main.go
 
   rabbitmq:
     image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
