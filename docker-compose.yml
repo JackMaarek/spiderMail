@@ -50,7 +50,7 @@ services:
       - './services/MailerService.go:/go/src/services/MailerService.go'
       - './models/:/go/src/models/'
 
-    command: go run main.go
+    command: go run src/main.go
 
   rabbitmq:
     image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
