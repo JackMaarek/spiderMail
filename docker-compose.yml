@@ -40,15 +40,27 @@ services:
       - app-tier
     depends_on:
       - db
+
+  app-consumer:
+    image: golang:1.13-alpine
+    ports:
+      - '8088:8088'
+    volumes:
+      - './rabbitmq/:/go/src/'
+      - './services/MailerService.go:/go/src/services/MailerService.go'
+      - './models/:/go/src/models/'
+
+    command: go run main.go
+
   rabbitmq:
     image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
     ports:
       - '15672:15672'
       - "5672:5672"
     volumes:
-      - 'rabbitmq_data:/bitnami'
+      - 'rmq_data:/bitnami'
     networks:
       - app-tier
 volumes:
-  rabbitmq_data:
+  rmq_data:
     driver: local
