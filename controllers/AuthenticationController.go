@@ -37,6 +37,7 @@ func Registration(c *gin.Context) {
 
 func Login(c *gin.Context) {
 	var u models.User
+	var tokenString string
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
@@ -48,16 +49,16 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	err = SignIn(u.Email, u.Password)
+	tokenString, err = SignIn(u.Email, u.Password)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Please provide valid credentials")
 		return
 	}
 
-	c.JSON(http.StatusOK, "Successfully signed in.")
+	c.JSON(http.StatusOK, tokenString)
 }
 
-func SignIn(email string, password string) error {
+func SignIn(email string, password string) (string, error) {
 
 	var err error
 
@@ -65,11 +66,16 @@ func SignIn(email string, password string) error {
 
 	user, err = models.FindUserByEmail(email)
 	if err != nil {
-		return err
+		return "", err
 	}
 	err = models.VerifyPassword(user.Password, password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return err
+		return "", err
 	}
-	return nil
+	var token *models.Token
+	token, err = models.FindTokenByUserID(user.ID)
+	if err != nil {
+		return "", err
+	}
+	return token.Token, nil
 }
