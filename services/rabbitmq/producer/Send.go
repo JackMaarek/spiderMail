@@ -1,46 +1,66 @@
 package producer
 
 import (
-	"log"
+	"os"
 
 	"github.com/streadway/amqp"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
+func sendToRabbit() {
+	// Get the connection string from the environment variable
+	url := os.Getenv("AMQP_URL")
+
+	//If it doesnt exist, use the default connection string
+	if url == "" {
+		url = "amqp://guest:guest@localhost:5672"
 	}
-}
 
-func main() {
-	conn, err := amqp.Dial("amqp://user:bitnami@localhost:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
+	// Connect to the rabbitMQ instance
+	connection, err := amqp.Dial(url)
 
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
-	defer ch.Close()
+	if err != nil {
+		panic("could not establish connection with RabbitMQ:" + err.Error())
+	}
 
-	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
+	// Create a channel from the connection. We'll use channels to access the data in the queue rather than the
+	// connection itself
+	channel, err := connection.Channel()
 
-	body := "Hello World!"
-	err = ch.Publish(
-		"",     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
-		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(body),
-		})
-	log.Printf(" [x] Sent %s", body)
-	failOnError(err, "Failed to publish a message")
+	if err != nil {
+		panic("could not open RabbitMQ channel:" + err.Error())
+	}
+
+	// We create an exahange that will bind to the queue to send and receive messages
+	err = channel.ExchangeDeclare("events", "topic", true, false, false, false, nil)
+
+	if err != nil {
+		panic(err)
+	}
+
+	// We create a message to be sent to the queue.
+	// It has to be an instance of the aqmp publishing struct
+	message := amqp.Publishing{
+		Body: []byte("Hello World"),
+	}
+
+	// We publish the message to the exahange we created earlier
+	err = channel.Publish("events", "random-key", false, false, message)
+
+	if err != nil {
+		panic("error publishing a message to the queue:" + err.Error())
+	}
+
+	// We create a queue named Test
+	_, err = channel.QueueDeclare("test", true, false, false, false, nil)
+
+	if err != nil {
+		panic("error declaring the queue: " + err.Error())
+	}
+
+	// We bind the queue to the exchange to send and receive data from the queue
+	err = channel.QueueBind("test", "#", "events", false, nil)
+
+	if err != nil {
+		panic("error binding to the queue: " + err.Error())
+	}
 }
