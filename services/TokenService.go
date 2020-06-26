@@ -71,7 +71,6 @@ func TokenValid(c *gin.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(token.Claims.(jwt.Claims))
 	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 		return err
 	}

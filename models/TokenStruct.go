@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/jinzhu/gorm"
 	"time"
@@ -78,7 +77,6 @@ func UpdateToken(token string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(token)
 	oldToken, err = FindTokenByToken(token)
 	if err != nil {
 		return err
@@ -90,7 +88,6 @@ func UpdateToken(token string) error {
 	oldToken.Token = newToken
 	oldToken.ExpiresAt = time.Now().Add(newExpireDate)
 	err = db.Debug().Save(&oldToken).Error
-	fmt.Println(&oldToken.Token)
 	if err != nil {
 		return err
 	}
