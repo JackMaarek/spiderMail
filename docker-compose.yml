@@ -41,30 +41,6 @@ services:
       - '15672:15672'
     volumes:
       - 'rabbitmq_data:/bitnami'
-  consummer-app:
-    image: golang:1.13-alpine
-    environment:
-      DB_USER: spidermail
-      DB_PASSWORD: spidermail
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: spidermail
-    volumes:
-      - "rabbitmq:/go/src"
-      - "models/:go/src"
-      - "services/MailerServices.go:go/src/sevices/MailerServices."
-      - "go.mod:go/src/"
-    command:
-      - go mod download
-      - go build -o main .
-      - ./main
-    ports:
-      - "3333:8080"
-    tty: true
-    links:
-      - db
-    depends_on:
-      - db
 volumes:
   rabbitmq_data:
     driver: local
