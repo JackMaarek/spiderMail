@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -31,7 +30,8 @@ func Registration(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	fmt.Println(tokenCreated)
+	c.Header("Authorization", "Bearer "  + tokenCreated.Token)
+
 	c.JSON(http.StatusCreated, "User has been created:"+userCreated.Name+userCreated.Email)
 }
 
@@ -55,7 +55,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, tokenString)
+	c.Header("Authorization", "Bearer "  + tokenString)
+
+	c.JSON(http.StatusOK, "Successfuly signed in")
 }
 
 func SignIn(email string, password string) (string, error) {

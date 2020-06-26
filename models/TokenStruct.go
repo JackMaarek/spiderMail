@@ -36,7 +36,7 @@ func CreateTokenFromUser(user *User) (*Token, error) {
 	if err != nil {
 		return &Token{}, err
 	}
-	return nil, err
+	return &createdToken, err
 }
 
 func FindTokenByUserID(uid uint64) (*Token, error) {

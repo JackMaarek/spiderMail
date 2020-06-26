@@ -31,8 +31,9 @@ func CreateRecipientsList(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	var recipientsList models.RecipientsList = list.recipientsList
-	var recipients []models.Recipient = list.recipients
+	fmt.Println("LISTE: ", list)
+	var recipientsList = list.recipientsList
+	var recipients = list.recipients
 
 	err := models.CreateRecipientList(&recipientsList)
 	if err != nil {
