@@ -6,11 +6,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func sendToRabbit() {
+func SendToRabbit() {
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:bitmani@localhost:5672"
+		url = "amqp://user:bitnami@rabbitmq:5672"
 	}
 
 	// Connect to the rabbitMQ instance
@@ -60,4 +60,5 @@ func sendToRabbit() {
 	if err != nil {
 		panic("error binding to the queue: " + err.Error())
 	}
+
 }

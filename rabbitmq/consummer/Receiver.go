@@ -6,13 +6,12 @@ import (
 	"os"
 )
 
-func receiveToRabbit() {
+func ReceiveToRabbit() {
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:bitmani@localhost:5672"
+		url = "amqp://user:bitnami@rabbitmq:5672"
 	}
-
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
 
