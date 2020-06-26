@@ -7,12 +7,10 @@ import (
 )
 
 func sendToRabbit() {
-	// Get the connection string from the environment variable
 	url := os.Getenv("AMQP_URL")
 
-	//If it doesnt exist, use the default connection string
 	if url == "" {
-		url = "amqp://guest:guest@localhost:5672"
+		url = "amqp://user:bitmani@localhost:5672"
 	}
 
 	// Connect to the rabbitMQ instance
@@ -23,7 +21,6 @@ func sendToRabbit() {
 	}
 
 	// Create a channel from the connection. We'll use channels to access the data in the queue rather than the
-	// connection itself
 	channel, err := connection.Channel()
 
 	if err != nil {
@@ -57,7 +54,7 @@ func sendToRabbit() {
 		panic("error declaring the queue: " + err.Error())
 	}
 
-	// We bind the queue to the exchange to send and receive data from the queue
+	//
 	err = channel.QueueBind("test", "#", "events", false, nil)
 
 	if err != nil {
