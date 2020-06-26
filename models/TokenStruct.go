@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/jinzhu/gorm"
 	"time"
@@ -24,6 +25,9 @@ func CreateTokenFromUser(user *User) (*Token, error) {
 	}
 	var expireDate time.Duration
 	expireDate, err = services.CreateTokenExpireDate()
+	if err != nil {
+		return &Token{}, err
+	}
 
 	var createdToken = Token{
 		Token:     token,
@@ -50,4 +54,45 @@ func FindTokenByUserID(uid uint64) (*Token, error) {
 		return &Token{}, errors.New("Token Not Found")
 	}
 	return &token, nil
+}
+
+func FindTokenByToken(token string) (*Token, error) {
+	var err error
+	var tokenStruct Token
+	err = db.Debug().Model(&Token{}).Where("token = ?", token).Take(&tokenStruct).Error
+	if err != nil {
+		return &Token{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Token{}, errors.New("Token not fount")
+	}
+	return &tokenStruct, nil
+}
+
+func UpdateToken(token string) error {
+	var err error
+	var oldToken *Token
+	var newExpireDate time.Duration
+	var newToken string
+	newExpireDate, err = services.CreateTokenExpireDate()
+	if err != nil {
+		return err
+	}
+	fmt.Println(token)
+	oldToken, err = FindTokenByToken(token)
+	if err != nil {
+		return err
+	}
+	newToken, err = services.CreateToken(oldToken.UserId)
+	if err != nil {
+		return err
+	}
+	oldToken.Token = newToken
+	oldToken.ExpiresAt = time.Now().Add(newExpireDate)
+	err = db.Debug().Save(&oldToken).Error
+	fmt.Println(&oldToken.Token)
+	if err != nil {
+		return err
+	}
+	return nil
 }

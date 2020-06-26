@@ -1,42 +1,54 @@
 package consummer
 
 import (
-	"fmt"
 	"github.com/streadway/amqp"
-	"os"
+	"log"
 )
 
-func receiveToRabbit() {
-	url := os.Getenv("AMQP_URL")
-
-	if url == "" {
-		url = "amqp://user:bitmani@localhost:5672"
-	}
-
-	// Connect to the rabbitMQ instance
-	connection, err := amqp.Dial(url)
-
+func failOnError(err error, msg string) {
 	if err != nil {
-		panic("could not establish connection with RabbitMQ:" + err.Error())
+		log.Fatalf("%s: %s", msg, err)
 	}
+}
 
-	channel, err := connection.Channel()
+func ReceiveFromRabbit() {
+	conn, err := amqp.Dial("amqp://user:bitmani@localhost:5672")
+	failOnError(err, "Failed to connect to RabbitMQ")
+	defer conn.Close()
 
-	if err != nil {
-		panic("could not open RabbitMQ channel:" + err.Error())
-	}
+	ch, err := conn.Channel()
+	failOnError(err, "Failed to open a channel")
+	defer ch.Close()
 
-	msgs, err := channel.Consume("test", "", false, false, false, false, nil)
+	q, err := ch.QueueDeclare(
+		"hello", // name
+		false,   // durable
+		false,   // delete when unused
+		false,   // exclusive
+		false,   // no-wait
+		nil,     // arguments
+	)
+	failOnError(err, "Failed to declare a queue")
 
-	if err != nil {
-		panic("error consuming the queue: " + err.Error())
-	}
+	msgs, err := ch.Consume(
+		q.Name, // queue
+		"",     // consumer
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	failOnError(err, "Failed to register a consumer")
 
-	// The msgs will be a go channel, not an amqp channel
-	for msg := range msgs {
-		fmt.Println("message received: " + string(msg.Body))
-		msg.Ack(false)
-	}
+	forever := make(chan bool)
 
-	defer connection.Close()
+	go func() {
+		for d := range msgs {
+			log.Printf("Received a message: %s", d.Body)
+		}
+	}()
+
+	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+	<-forever
 }

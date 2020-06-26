@@ -15,6 +15,7 @@ func SetupRouter(router *gin.Engine) {
 	{
 		authorized.PUT("/users/:id", controllers.UpdateUser)
 		authorized.DELETE("/users/:id", controllers.DeleteUser)
+		authorized.GET("/users/refresh_token", controllers.RefreshToken)
 		authorized.GET("/organisms/:id/users", controllers.GetUsersByOrganism)
 		authorized.GET("/organisms", controllers.GetOrganisms)
 		authorized.GET("/organisms/:id", controllers.GetOrganismById)
