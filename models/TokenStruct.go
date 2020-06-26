@@ -1,7 +1,9 @@
 package models
 
 import (
+	"errors"
 	"github.com/JackMaarek/spiderMail/services"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
@@ -35,4 +37,17 @@ func CreateTokenFromUser(user *User) (*Token, error) {
 		return &Token{}, err
 	}
 	return nil, err
+}
+
+func FindTokenByUserID(uid uint64) (*Token, error) {
+	var err error
+	var token Token
+	err = db.Debug().Model(&Token{}).Where("user_id = ?", uid).Take(&token).Error
+	if err != nil {
+		return &Token{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &Token{}, errors.New("Token Not Found")
+	}
+	return &token, nil
 }

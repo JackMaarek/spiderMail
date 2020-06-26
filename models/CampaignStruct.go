@@ -10,7 +10,7 @@ type Campaign struct {
 	ID               uint64    `gorm:"primary_key"`
 	Name             string    `gorm:"size:255"`
 	DateCreated      time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
-	DateStart		 time.Time
+	DateStart        time.Time
 	OrganismId       uint64
 	Subject          string `gorm:"size:255"`
 	Content          string `gorm:"size:1023"`
