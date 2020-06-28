@@ -11,7 +11,7 @@ type Config struct {
 	PROVIDER_SECRET string `env:"PROVIDER_SECRET"`
 }
 
-func main() {
+func TestMail() {
 	cfg := Config{}
 	env.Parse(&cfg)
 
