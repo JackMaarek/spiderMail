@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,8 @@ func GetOrganisms(c *gin.Context) {
 	organisms, err = models.FindOrganisms()
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, organisms)
@@ -30,7 +30,8 @@ func GetOrganismById(c *gin.Context) {
 	organism, err = models.FindOrganismByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, organism)
@@ -44,7 +45,8 @@ func DeleteOrganismById(c *gin.Context) {
 	err = models.DeleteOrganismByID(id)
 
 	if err != nil {
-		c.JSON(http.StatusNotModified, "")
+		errorMessage := "Organism with id " + c.Param("id") + " has not been deleted."
+		c.JSON(http.StatusNotModified, errorMessage)
 		return
 	}
 
@@ -82,7 +84,7 @@ func CreateOrganism(c *gin.Context) {
 
 	err := models.CreateOrganism(&organism)
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
 	}
 
 	c.JSON(http.StatusCreated, organism)

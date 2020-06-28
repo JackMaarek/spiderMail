@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
@@ -42,7 +41,8 @@ func GetUsersByOrganism(c *gin.Context) {
 	users, err = models.FindUsersByOrganismID(id)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, "Unable to update user")
+		return
 	}
 
 	c.JSON(http.StatusOK, users)
@@ -57,8 +57,22 @@ func DeleteUser(c *gin.Context) {
 	_, err = models.DeleteUserByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, "Unable to delete user")
+		return
 	}
 
 	c.JSON(http.StatusOK, "User has been deleted")
+}
+
+func RefreshToken(c *gin.Context)  {
+	var token string
+	var err error
+	token = services.ExtractToken(c)
+	err = models.UpdateToken(token)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.Header("Authorization", "Bearer "+token)
+	c.JSON(http.StatusOK, "Token has been refreshed")
 }
