@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -10,10 +11,10 @@ import (
 func Registration(c *gin.Context) {
 	user := models.User{}
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
-	var err = models.ValidateUser(&user, "")
+	var err = models.ValidateUser(&user, "Please provide valid login details")
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
@@ -21,17 +22,18 @@ func Registration(c *gin.Context) {
 	userCreated, err := models.CreateUser(&user)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, "An error occurred")
 		return
 	}
+	// @fixme: Should send email to confirm user registration.
 	var tokenCreated *models.Token
 	tokenCreated, err = models.CreateTokenFromUser(userCreated)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, "An error occurred")
 		return
 	}
-	c.Header("Authorization", "Bearer "  + tokenCreated.Token)
-
+	fmt.Println(tokenCreated)
+	c.Header("Authorization", "Bearer: "+tokenCreated.Token)
 	c.JSON(http.StatusCreated, "User has been created:"+userCreated.Name+userCreated.Email)
 }
 
@@ -54,10 +56,8 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Please provide valid credentials")
 		return
 	}
-
-	c.Header("Authorization", "Bearer "  + tokenString)
-
-	c.JSON(http.StatusOK, "Successfuly signed in")
+	c.Header("Authorization", "Bearer: "+tokenString)
+	c.JSON(http.StatusOK, "Logged in successfully")
 }
 
 func SignIn(email string, password string) (string, error) {

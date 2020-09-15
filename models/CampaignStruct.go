@@ -9,7 +9,7 @@ import (
 type Campaign struct {
 	ID               uint64    `gorm:"primary_key"`
 	Name             string    `gorm:"size:255"`
-	DateCreated      time.Time `gorm:"default:NULL ON UPDATE CURRENT_TIMESTAMP"`
+	DateCreated      time.Time `gorm:"default:NULL"`
 	DateStart        time.Time
 	OrganismId       uint64
 	Subject          string `gorm:"size:255"`
@@ -85,7 +85,8 @@ func EditCampaignByID(campaign *Campaign, id uint64) error {
 func CreateCampaign(campaign *Campaign) error {
 	var err error
 	campaign.DateCreated = time.Now()
-	err = db.Debug().Create(campaign).Error
+	campaign.DateStart = time.Now()
+	err = db.Debug().Create(&campaign).Error
 
 	if err != nil {
 		return err

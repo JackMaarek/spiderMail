@@ -7,10 +7,13 @@ import (
 )
 
 func ReceiveToRabbit() {
+	var messages []byte
+	var messageList []byte
+
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:bitnami@rabbitmq:5672"
+		url = "amqp://user:guest@rabbitmq:5672"
 	}
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
@@ -33,9 +36,15 @@ func ReceiveToRabbit() {
 
 	// The msgs will be a go channel, not an amqp channel
 	for msg := range msgs {
+		messageList = append(messages, msg.Body...)
 		fmt.Println("message received: " + string(msg.Body))
 		msg.Ack(false)
 	}
 
-	defer connection.Close()
+	fmt.Println(messageList)
+	for message := range messageList {
+		fmt.Println(string(message))
+	}
+
+	//defer connection.Close()
 }
