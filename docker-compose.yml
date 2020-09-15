@@ -1,9 +1,5 @@
 version: "3"
 
-networks:
-  app-tier:
-    driver: bridge
-
 services:
   db:
     image: mysql
@@ -19,8 +15,6 @@ services:
       - ./mysql_data:/var/lib/mysql
     ports:
     - "3306:3306"
-    networks:
-      - app-tier
   app:
     build: .
     environment:
@@ -36,8 +30,6 @@ services:
     tty: true
     links:
       - db
-    networks:
-      - app-tier
     depends_on:
       - db
 
@@ -46,12 +38,11 @@ services:
     ports:
       - '8088:8088'
     volumes:
-      - './rabbitmq/:/src/github.com/JackMaarek/spiderMail/'
-      - './services/MailerService.go:/src/github.com/JackMaarek/spiderMail/services/MailerService.go'
-      - './models/:/src/github.com/JackMaarek/spiderMail/models/'
-      - './go.mod:/src/github.com/JackMaarek/spiderMail/go.mod'
-
-    command: go run /src/github.com/JackMaarek/spiderMail/main.go
+      - './rabbitmq/:/go/src/github.com/JackMaarek/spiderMail/'
+      - './services/MailerService.go:/go/src/github.com/JackMaarek/spiderMail/services/MailerService.go'
+      - './models/:/go/src/github.com/JackMaarek/spiderMail/models/'
+      - './go.mod:/go/src/github.com/JackMaarek/spiderMail/go.mod'
+    command: go run /go/src/github.com/JackMaarek/spiderMail/main.go
 
   rabbitmq:
     image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
@@ -60,8 +51,9 @@ services:
       - "5672:5672"
     volumes:
       - 'rmq_data:/bitnami'
-    networks:
-      - app-tier
+    environment:
+      RABBITMQ_USERNAME: user
+      RABBITMQ_PASSWORD: bitnami
 volumes:
   rmq_data:
     driver: local
