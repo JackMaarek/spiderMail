@@ -8,6 +8,7 @@ import (
 type RecipientsList struct {
 	ID         uint64       `gorm: "primary_key"`
 	Name       string       `gorm:"size:255"`
+	Recipients []Recipient
 	OrganismId uint64
 }
 
@@ -22,6 +23,16 @@ func FindRecipientsListByID(uid uint32) (RecipientsList, error) {
 		return RecipientsList{}, errors.New("Recipients List Not Found")
 	}
 	return recipientList, nil
+}
+
+func FindRecipientsListsByOrganismID(id uint64) ([]RecipientsList, error) {
+	var err error
+	var recipientslist []RecipientsList
+	err = db.Debug().Where("organism_id = ?", id).Find(&recipientslist).Error
+	if err != nil {
+		return nil, err
+	}
+	return recipientslist, nil
 }
 
 func FindRecipientsList() ([]RecipientsList, error) {

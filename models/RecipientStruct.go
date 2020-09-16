@@ -10,7 +10,8 @@ type Recipient struct {
 	ID              uint64            `gorm: "primary_key"`
 	Name            string            `gorm:"size:255"`
 	Email           string            `gorm:"size:255"`
-	RecipientsListId uint64
+	RecipientsList 	RecipientsList
+	RecipientsListID uint64
 }
 
 func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
@@ -69,13 +70,13 @@ func EditrecipientByID(recipient Recipient) (*Recipient, error) {
 	return &recipient, err
 }
 
-func CreateRecipient(recipient *Recipient) error {
+func CreateRecipient(recipient Recipient) (*Recipient, error) {
 	var err error
 	err = db.Debug().Model(Recipient{}).Create(recipient).Error
 
 	if err != nil {
-		return err
+		return &Recipient{}, err
 	}
 
-	return nil
+	return &recipient, err
 }

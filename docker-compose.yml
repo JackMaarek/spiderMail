@@ -26,7 +26,7 @@ services:
     volumes:
       - ".:/go/src"
     ports:
-      - "8080:8080"
+      - "8081:8081"
     tty: true
     links:
       - db
@@ -51,9 +51,19 @@ services:
       - "5672:5672"
     volumes:
       - 'rmq_data:/bitnami'
+      - 'rabbitmq_data:/bitnami'
     environment:
       RABBITMQ_USERNAME: user
       RABBITMQ_PASSWORD: bitnami
+    networks:
+      - app-tier
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks: 
+    - app-tier
 volumes:
   rmq_data:
     driver: local
