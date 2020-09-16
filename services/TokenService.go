@@ -2,12 +2,13 @@ package services
 
 import (
 	"fmt"
-	"github.com/JackMaarek/spiderMail/config"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/JackMaarek/spiderMail/config"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 func CreateTokenExpireDate() (time.Duration, error) {
@@ -23,14 +24,14 @@ func CreateTokenExpireDate() (time.Duration, error) {
 	return expireDate, nil
 }
 
-func CreateToken(userId uint64) (string, error) {
+func CreateToken(userId uint64, userAdmin bool) (string, error) {
 	var err error
 	//Creating Access Token
 	var expireDate time.Duration
 	expireDate, err = CreateTokenExpireDate()
 	atClaims := jwt.MapClaims{}
 	atClaims["revoked"] = false
-	atClaims["admin"] = false
+	atClaims["admin"] = userAdmin
 	atClaims["user_id"] = userId
 	atClaims["exp"] = time.Now().Add(expireDate).UTC()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)

@@ -18,7 +18,7 @@ type Token struct {
 func CreateTokenFromUser(user *User) (*Token, error) {
 	var token string
 	var err error
-	token, err = services.CreateToken(user.ID)
+	token, err = services.CreateToken(user.ID, user.Admin)
 	if err != nil {
 		return &Token{}, err
 	}
