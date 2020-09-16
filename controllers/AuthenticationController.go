@@ -51,33 +51,35 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	tokenString, err = SignIn(u.Email, u.Password)
+	tokenString, err = SignIn(&u)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Please provide valid credentials")
 		return
 	}
-	c.Header("Authorization", "Bearer: "+tokenString)
-	c.JSON(http.StatusOK, "Logged in successfully")
+	c.Header("Authorization", "Bearer: " + tokenString)
+	c.JSON(http.StatusOK, u)
 }
 
-func SignIn(email string, password string) (string, error) {
+func SignIn(u *models.User) (string, error) {
 
 	var err error
-
-	var user *models.User
-
-	user, err = models.FindUserByEmail(email)
+	var lu *models.User
+	lu, err = models.FindUserByEmail(u.Email)
 	if err != nil {
 		return "", err
 	}
-	err = models.VerifyPassword(user.Password, password)
+	err = models.VerifyPassword(lu.Password, u.Password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
 	var token *models.Token
-	token, err = models.FindTokenByUserID(user.ID)
+	token, err = models.FindTokenByUserID(lu.ID)
 	if err != nil {
 		return "", err
 	}
+	
+	u.ID = lu.ID
+	u.OrganismId = lu.OrganismId
+
 	return token.Token, nil
 }
