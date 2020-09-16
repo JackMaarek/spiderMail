@@ -2,6 +2,12 @@
 
 A small API emailing solution.
 
+
+![assets/front.png](assets/front.png)
+A front end application is available at the following adress : https://github.com/edwinvautier/spidermail-front/
+
+---
+
 ## Requirements
 
 If you use docker you will only need:
