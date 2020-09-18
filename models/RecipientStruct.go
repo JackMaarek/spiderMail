@@ -18,8 +18,21 @@ func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
 	var err error
 	var recipients []Recipient
 
-	err = db.Debug().Model(Recipient{}).Where("recipients_list_id = ?", uid).Find(&recipients).Error
-
+	var (
+		ID uint64
+		Name string
+		Email string
+	)
+	rows, _ := db.Raw("SELECT * FROM recipients WHERE recipients_list_id = ?", uid).Rows()
+	for rows.Next() {
+		rows.Scan(&ID, &Name, &Email)
+		recipient := Recipient {
+			ID: ID,
+			Name: Name,
+			Email: Email,
+		}
+		recipients = append(recipients, recipient)
+	}
 	if err != nil {
 		return &[]Recipient{}, err
 	}
