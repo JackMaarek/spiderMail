@@ -41,7 +41,7 @@ func CreateRecipientsList(c *gin.Context) {
 	}
 
 	for i, recipient := range recipients {
-		err = models.CreateRecipient(&recipient)
+		_, err := models.CreateRecipient(&recipient)
 		if err != nil {
 			fmt.Println("Error in recipients at index %d", i)
 		}
@@ -61,7 +61,7 @@ func GetRecipientsListById(c *gin.Context) {
 	var err error
 	var recipientsList models.RecipientsList
 
-	recipientsList, err = models.FindRecipientsListByID(uint32(id))
+	recipientsList, err = models.FindRecipientsListByID(id)
 
 	if err != nil {
 		fmt.Println("Error: ", err)

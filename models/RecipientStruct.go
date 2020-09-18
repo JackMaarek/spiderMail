@@ -70,7 +70,7 @@ func EditrecipientByID(recipient Recipient) (*Recipient, error) {
 	return &recipient, err
 }
 
-func CreateRecipient(recipient Recipient) (*Recipient, error) {
+func CreateRecipient(recipient *Recipient) (*Recipient, error) {
 	var err error
 	err = db.Debug().Model(Recipient{}).Create(recipient).Error
 
@@ -78,5 +78,5 @@ func CreateRecipient(recipient Recipient) (*Recipient, error) {
 		return &Recipient{}, err
 	}
 
-	return &recipient, err
+	return recipient, err
 }
