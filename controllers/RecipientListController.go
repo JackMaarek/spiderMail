@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func GetRecipientList(c *gin.Context) {

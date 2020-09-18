@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"errors"
 	"github.com/jinzhu/gorm"
 	"time"
@@ -15,6 +16,7 @@ type Campaign struct {
 	Subject          string `gorm:"size:255"`
 	Content          string `gorm:"size:1023"`
 	RecipientsListId uint64
+	IsDone		  	 bool	`gorm:"default:false"`
 }
 
 func FindCampaigns() ([]Campaign, error) {
@@ -92,4 +94,26 @@ func CreateCampaign(campaign *Campaign) error {
 		return err
 	}
 	return nil
+}
+
+func GetCampaignsToSend() []uint64 {
+	var campaignIds []uint64
+	var id uint64
+
+	// Execute query
+	rows, err := db.Raw("SELECT id FROM campaigns WHERE DATEDIFF(date_start, NOW()) <= 0 AND is_done = 0").Rows()
+	defer rows.Close()
+
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return nil
+	}
+
+	// Scan the query
+	for rows.Next() {
+		rows.Scan(&id)
+		campaignIds = append(campaignIds, id)
+	}
+
+	return campaignIds
 }

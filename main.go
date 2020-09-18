@@ -1,13 +1,15 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/JackMaarek/spiderMail/models"
+	"github.com/JackMaarek/spiderMail/routines"
 	"github.com/JackMaarek/spiderMail/routes"
 	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
-	"github.com/itsjamie/gin-cors"
-	"log"
-	"time"
+	cors "github.com/itsjamie/gin-cors"
 )
 
 type config struct {
@@ -39,7 +41,7 @@ func main() {
 
 	routes.SetupRouter(router)
 
-	// producer.SendToRabbit()
+	go routines.CheckForCampaignsToSend()
 
 	log.Fatal(router.Run(":8081"))
 }

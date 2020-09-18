@@ -15,6 +15,8 @@ services:
       - ./mysql_data:/var/lib/mysql
     ports:
     - "3306:3306"
+    networks:
+      - app-tier
   app:
     build: .
     environment:
@@ -32,6 +34,8 @@ services:
       - db
     depends_on:
       - db
+    networks: 
+      - app-tier
 
   app-consumer:
     build: rabbitmq/.
