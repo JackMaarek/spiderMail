@@ -11,16 +11,19 @@ import (
 func CheckForCampaignsToSend(interval int) {
 	// Infinite loop
 	for true {
+		fmt.Println("Checking for campaigns...")
 		var campaignIds []uint64
-
+		
 		campaignIds = models.GetCampaignsToSend()
-
+		if len(campaignIds) == 0 {
+			fmt.Println("No campaign to send!")
+		}
 		for _, id := range campaignIds {
 			var err error
 			err = producer.SendToRabbit(id)
 			
 			if err != nil {
-				fmt.Println("Error while sending campaign: ", err)
+				fmt.Println("Error while sending campaign n°", id ,": ", err)
 			} else {
 				// If message correctly sent to the rabbitmq, update campaign to done
 				campaign, _ := models.FindCampaignByID(id)
@@ -29,6 +32,7 @@ func CheckForCampaignsToSend(interval int) {
 			}
 		}
 
+		fmt.Println("Check finished!")
 		// Sleep N minutes before checking again for campaigns
 		time.Sleep(time.Duration(interval) * time.Minute)
 	}
