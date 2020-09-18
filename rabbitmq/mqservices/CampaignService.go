@@ -9,7 +9,6 @@ func SendCampaignByID(id uint64) {
 	var err error
 	var campaign models.Campaign
 
-
 	campaign, err = models.FindCampaignByID(id)
 	if err != nil {
 		panic("Cannot get campaign with error:" + err.Error())
@@ -21,8 +20,6 @@ func SendCampaignByID(id uint64) {
 	//recipientList, err = models.FindRecipientsListByID(campaign.RecipientsListId)
 	//fmt.Println(recipientList.)
 	//for recipient := range RecipientsList {
-
-
 
 	//CallMailerService()
 }
