@@ -3,8 +3,7 @@ package main
 import (
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/routes"
-	//"github.com/JackMaarek/spiderMail/services/rabbitmq/producer"
-	// "github.com/JackMaarek/spiderMail/rabbitmq/consummer"
+	"github.com/JackMaarek/spiderMail/services/rabbitmq/producer"
 	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
@@ -28,9 +27,6 @@ func main() {
 	// Database initialization
 	models.InitializeDb(cfg.DbUser, cfg.DbPassword, cfg.DbHost, cfg.DbName, cfg.DbPort)
 	models.MakeMigrations()
-	//producer.SendToRabbit()
-	// consummer.ReceiveToRabbit()
-
 	router := gin.Default()
 	router.Use(cors.Middleware(cors.Config{
 		Origins:         "*",
@@ -43,6 +39,8 @@ func main() {
 	}))
 
 	routes.SetupRouter(router)
+
+	producer.SendToRabbit()
 
 	log.Fatal(router.Run(":8081"))
 }

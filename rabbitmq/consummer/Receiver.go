@@ -6,17 +6,18 @@ import (
 	"os"
 )
 
-func ReceiveToRabbit() {
+func ReceiveFromRabbit() {
 	var messages []byte
 	var messageList []byte
 
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:guest@rabbitmq:5672"
+		url = "amqp://user:guest@localhost:5672"
 	}
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
+	fmt.Println(url)
 
 	if err != nil {
 		panic("could not establish connection with RabbitMQ:" + err.Error())
@@ -43,8 +44,8 @@ func ReceiveToRabbit() {
 
 	fmt.Println(messageList)
 	for message := range messageList {
-		fmt.Println(string(message))
+		fmt.Println(message)
 	}
 
-	//defer connection.Close()
+	defer connection.Close()
 }

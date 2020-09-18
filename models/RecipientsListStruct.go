@@ -12,7 +12,7 @@ type RecipientsList struct {
 	OrganismId uint64
 }
 
-func FindRecipientsListByID(uid uint32) (RecipientsList, error) {
+func FindRecipientsListByID(uid uint64) (RecipientsList, error) {
 	var err error
 	var recipientList RecipientsList
 	err = db.Debug().Model(&RecipientsList{}).Where("id = ?", uid).Take(&recipientList).Error

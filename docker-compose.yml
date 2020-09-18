@@ -34,15 +34,15 @@ services:
       - db
 
   app-consumer:
-    image: golang:1.13-alpine
+    build: rabbitmq/.
     ports:
-      - '8088:8088'
+      - '8082:8082'
     volumes:
-      - "./rabbitmq/:/go/src/github.com/JackMaarek/spiderMail/rabbitmq/"
+      - './rabbitmq/.:/go/src/github.com/JackMaarek/spiderMail/rabbitmq/'
     tty: true
 
   rabbitmq:
-    image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
+    image: 'bitnami/rabbitmq:latest'
     ports:
       - '15672:15672'
       - "5672:5672"
