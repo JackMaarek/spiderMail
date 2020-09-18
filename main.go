@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/routes"
-	"github.com/JackMaarek/spiderMail/services/rabbitmq/producer"
 	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
@@ -40,7 +39,7 @@ func main() {
 
 	routes.SetupRouter(router)
 
-	producer.SendToRabbit()
+	// producer.SendToRabbit()
 
 	log.Fatal(router.Run(":8081"))
 }
