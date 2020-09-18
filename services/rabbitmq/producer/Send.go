@@ -10,7 +10,7 @@ import (
 func SendToRabbit(id uint64) error{
 	url := os.Getenv("AMQP_URL")
 	if url == "" {
-		url = "amqp://user:guest@rabbitmq:5672"
+		url = "amqp://user:bitnami@rabbitmq:5672"
 	}
 
 	// Connect to the rabbitMQ instance

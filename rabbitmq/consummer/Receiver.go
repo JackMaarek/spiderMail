@@ -15,7 +15,7 @@ func ReceiveFromRabbit() {
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:guest@rabbitmq:5672"
+		url = "amqp://user:bitnami@rabbitmq:5672"
 	}
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
@@ -31,7 +31,7 @@ func ReceiveFromRabbit() {
 		panic("could not open RabbitMQ channel:" + err.Error())
 	}
 
-	msgs, err := channel.Consume("test", "", false, false, false, false, nil)
+	msgs, err := channel.Consume("campaigns", "", false, false, false, false, nil)
 
 	if err != nil {
 		panic("error consuming the queue: " + err.Error())
