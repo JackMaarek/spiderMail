@@ -18,7 +18,7 @@ func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
 	var err error
 	var recipients []Recipient
 
-	err = db.Debug().Model(&recipients).Where("recipients_list_id = ?", uid).Error
+	err = db.Debug().Where("recipients_list_id = ?", uid).Find(&recipients).Error
 
 	if err != nil {
 		return &[]Recipient{}, err

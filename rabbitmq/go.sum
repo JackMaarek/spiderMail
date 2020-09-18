@@ -4,6 +4,8 @@ github.com/JackMaarek/spiderMail v0.0.0-20200628110411-18657cfe3e7a h1:2oPasEHZ/
 github.com/JackMaarek/spiderMail v0.0.0-20200628110411-18657cfe3e7a/go.mod h1:fcUjbbMIwc+6RyLgfQ/UwM6xdVCfX47Sr4f4CZpsv3g=
 github.com/JackMaarek/spiderMail v0.0.0-20200918102346-e4ea32601af1 h1:THQ0onp+kidyX0zd1+5fIX2czroGTZ2pP20Lm/my9AY=
 github.com/JackMaarek/spiderMail v0.0.0-20200918102346-e4ea32601af1/go.mod h1:J4EH1ALHmq0c4YXLdy5Pn3fZT+Er3EHr2BcVI+f8JJM=
+github.com/JackMaarek/spiderMail v0.0.0-20200918152114-b62b8af794f3 h1:iZcTDq3OqKms1raSQdkfeK7sIX98VfVkdJkoWPtMKfM=
+github.com/JackMaarek/spiderMail v0.0.0-20200918152114-b62b8af794f3/go.mod h1:J4EH1ALHmq0c4YXLdy5Pn3fZT+Er3EHr2BcVI+f8JJM=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
 github.com/andybalholm/cascadia v1.1.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/badoux/checkmail v0.0.0-20181210160741-9661bd69e9ad h1:kXfVkP8xPSJXzicomzjECcw6tv1Wl9h1lNenWBfNKdg=
