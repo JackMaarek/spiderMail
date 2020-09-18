@@ -38,11 +38,8 @@ services:
     ports:
       - '8088:8088'
     volumes:
-      - './rabbitmq/:/go/src/github.com/JackMaarek/spiderMail/'
-      - './services/MailerService.go:/go/src/github.com/JackMaarek/spiderMail/services/MailerService.go'
-      - './models/:/go/src/github.com/JackMaarek/spiderMail/models/'
-      - './go.mod:/go/src/github.com/JackMaarek/spiderMail/go.mod'
-    command: go run /go/src/github.com/JackMaarek/spiderMail/main.go
+      - "./rabbitmq/:/go/src/github.com/JackMaarek/spiderMail/rabbitmq/"
+    tty: true
 
   rabbitmq:
     image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
@@ -51,7 +48,6 @@ services:
       - "5672:5672"
     volumes:
       - 'rmq_data:/bitnami'
-      - 'rabbitmq_data:/bitnami'
     environment:
       RABBITMQ_USERNAME: user
       RABBITMQ_PASSWORD: bitnami
@@ -63,7 +59,10 @@ services:
     ports:
       - 8080:8080
     networks: 
-    - app-tier
+      - app-tier
 volumes:
   rmq_data:
     driver: local
+networks:
+  app-tier:
+    external: false
