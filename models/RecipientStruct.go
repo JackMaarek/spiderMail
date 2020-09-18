@@ -7,10 +7,10 @@ import (
 )
 
 type Recipient struct {
-	ID              uint64            `gorm: "primary_key"`
-	Name            string            `gorm:"size:255"`
-	Email           string            `gorm:"size:255"`
-	RecipientsList 	RecipientsList
+	ID               uint64 `gorm: "primary_key"`
+	Name             string `gorm:"size:255"`
+	Email            string `gorm:"size:255"`
+	RecipientsList   RecipientsList
 	RecipientsListID uint64
 }
 
@@ -18,7 +18,7 @@ func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
 	var err error
 	var recipients []Recipient
 
-	err = db.Debug().Model(Recipient{}).Where("recipients_list_id = ?", uid).Take(&recipients).Error
+	err = db.Debug().Where("recipients_list_id = ?", uid).Find(&recipients).Error
 
 	if err != nil {
 		return &[]Recipient{}, err
