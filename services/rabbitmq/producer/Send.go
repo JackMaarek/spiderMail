@@ -6,11 +6,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func sendToRabbit() {
+func SendToRabbit() {
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:bitmani@localhost:5672"
+		url = "amqp://user:guest@rabbitmq:5672"
 	}
 
 	// Connect to the rabbitMQ instance
@@ -34,24 +34,23 @@ func sendToRabbit() {
 		panic(err)
 	}
 
-	// We create a message to be sent to the queue.
-	// It has to be an instance of the aqmp publishing struct
-	message := amqp.Publishing{
-		Body: []byte("Hello World"),
-	}
-
-	// We publish the message to the exahange we created earlier
-	err = channel.Publish("events", "random-key", false, false, message)
-
-	if err != nil {
-		panic("error publishing a message to the queue:" + err.Error())
-	}
-
 	// We create a queue named Test
 	_, err = channel.QueueDeclare("test", true, false, false, false, nil)
 
 	if err != nil {
 		panic("error declaring the queue: " + err.Error())
+	}
+
+	// We create a message to be sent to the queue.
+	// It has to be an instance of the aqmp publishing struct
+	message := amqp.Publishing{
+		Body: []byte("Hello World"),
+	}
+	// We publish the message to the exahange we created earlier
+	err = channel.Publish("events", "random-key", false, false, message)
+
+	if err != nil {
+		panic("error publishing a message to the queue:" + err.Error())
 	}
 
 	//
@@ -60,4 +59,5 @@ func sendToRabbit() {
 	if err != nil {
 		panic("error binding to the queue: " + err.Error())
 	}
+
 }

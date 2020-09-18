@@ -29,6 +29,7 @@ func SetupRouter(router *gin.Engine) {
 		authorized.DELETE("/campaigns/:id", controllers.DeleteCampaignById)
 		authorized.POST("/campaigns", controllers.CreateCampaign)
 		authorized.GET("/organisms/:id/campaigns", controllers.GetCampaignsByOrganismId)
+		authorized.GET("/organisms/:id/groups", controllers.GetRecipientsListsByOrganismId)
 
 		authorized.GET("/groups", controllers.GetRecipientList)
 		authorized.GET("/groups/:id", controllers.GetRecipientsListById)

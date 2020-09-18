@@ -41,7 +41,7 @@ func CreateRecipientsList(c *gin.Context) {
 	}
 
 	for i, recipient := range recipients {
-		err = models.CreateRecipient(&recipient)
+		_, err := models.CreateRecipient(&recipient)
 		if err != nil {
 			fmt.Println("Error in recipients at index %d", i)
 		}
@@ -61,7 +61,7 @@ func GetRecipientsListById(c *gin.Context) {
 	var err error
 	var recipientsList models.RecipientsList
 
-	recipientsList, err = models.FindRecipientsListByID(uint32(id))
+	recipientsList, err = models.FindRecipientsListByID(id)
 
 	if err != nil {
 		fmt.Println("Error: ", err)
@@ -105,4 +105,20 @@ func DeleteRecipientsListById(c *gin.Context) {
 
 	message := "Recipient List with id " + c.Param("id") + " have been deleted."
 	c.JSON(http.StatusOK, message)
+}
+
+func GetRecipientsListsByOrganismId(c *gin.Context) {
+	// Get id and converts it
+	id := services.ConvertStringToInt(c.Param("id"))
+
+	var err error
+	var recipientslists []models.RecipientsList
+
+	recipientslists, err = models.FindRecipientsListsByOrganismID(id)
+
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+
+	c.JSON(http.StatusOK, recipientslists)
 }

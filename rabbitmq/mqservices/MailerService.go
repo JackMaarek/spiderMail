@@ -1,4 +1,4 @@
-package services
+package mqservices
 
 import (
 	"github.com/caarlos0/env/v6"

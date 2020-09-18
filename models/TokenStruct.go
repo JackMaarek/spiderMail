@@ -18,7 +18,7 @@ type Token struct {
 func CreateTokenFromUser(user *User) (*Token, error) {
 	var token string
 	var err error
-	token, err = services.CreateToken(user.ID)
+	token, err = services.CreateToken(user.ID, user.Admin)
 	if err != nil {
 		return &Token{}, err
 	}
@@ -73,6 +73,7 @@ func UpdateToken(token string) error {
 	var oldToken *Token
 	var newExpireDate time.Duration
 	var newToken string
+	var u *User
 	newExpireDate, err = services.CreateTokenExpireDate()
 	if err != nil {
 		return err
@@ -81,7 +82,11 @@ func UpdateToken(token string) error {
 	if err != nil {
 		return err
 	}
-	newToken, err = services.CreateToken(oldToken.UserId)
+	u, err = FindUserByID(oldToken.UserId)
+	if err != nil {
+		return err
+	}
+	newToken, err = services.CreateToken(oldToken.UserId, u.Admin)
 	if err != nil {
 		return err
 	}

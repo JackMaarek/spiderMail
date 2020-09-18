@@ -26,21 +26,43 @@ services:
     volumes:
       - ".:/go/src"
     ports:
-      - "8080:8080"
+      - "8081:8081"
     tty: true
     links:
       - db
     depends_on:
       - db
-  rabbitmq:
-    image: 'docker.io/bitnami/rabbitmq:3.8-debian-10'
+
+  app-consumer:
+    build: rabbitmq/.
     ports:
-      - '4369:4369'
-      - '5672:5672'
-      - '25672:25672'
-      - '15672:15672'
+      - '8082:8082'
     volumes:
-      - 'rabbitmq_data:/bitnami'
+      - './rabbitmq/.:/go/src/github.com/JackMaarek/spiderMail/rabbitmq/'
+    tty: true
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    ports:
+      - '15672:15672'
+      - "5672:5672"
+    volumes:
+      - 'rmq_data:/bitnami'
+    environment:
+      RABBITMQ_USERNAME: user
+      RABBITMQ_PASSWORD: bitnami
+    networks:
+      - app-tier
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks: 
+      - app-tier
 volumes:
-  rabbitmq_data:
+  rmq_data:
     driver: local
+networks:
+  app-tier:
+    external: false
