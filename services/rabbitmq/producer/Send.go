@@ -1,63 +1,73 @@
 package producer
 
 import (
+	"fmt"
 	"os"
-
+	"strconv"
 	"github.com/streadway/amqp"
 )
 
-func SendToRabbit() {
+func SendToRabbit(id uint64) error{
 	url := os.Getenv("AMQP_URL")
-
 	if url == "" {
-		url = "amqp://user:guest@rabbitmq:5672"
+		url = "amqp://user:bitnami@rabbitmq:5672"
 	}
 
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
 
 	if err != nil {
-		panic("could not establish connection with RabbitMQ:" + err.Error())
+		fmt.Println("could not establish connection with RabbitMQ:" + err.Error())
+		return err
 	}
 
 	// Create a channel from the connection. We'll use channels to access the data in the queue rather than the
 	channel, err := connection.Channel()
 
 	if err != nil {
-		panic("could not open RabbitMQ channel:" + err.Error())
+		fmt.Println("could not open RabbitMQ channel:" + err.Error())
+		return err
 	}
 
-	// We create an exahange that will bind to the queue to send and receive messages
+	// We create an exchange that will bind to the queue to send and receive messages
 	err = channel.ExchangeDeclare("events", "topic", true, false, false, false, nil)
 
 	if err != nil {
-		panic(err)
+		fmt.Println("could not declare exchange:" + err.Error())
+		return err
 	}
 
-	// We create a queue named Test
-	_, err = channel.QueueDeclare("test", true, false, false, false, nil)
+	// We create a queue named Campaigns
+	_, err = channel.QueueDeclare("campaigns", true, false, false, false, nil)
 
 	if err != nil {
-		panic("error declaring the queue: " + err.Error())
+		fmt.Println("error declaring the queue: " + err.Error())
+		return err
 	}
 
 	// We create a message to be sent to the queue.
 	// It has to be an instance of the aqmp publishing struct
+	var idString string
+	idString = strconv.FormatUint(id, 10)
+
 	message := amqp.Publishing{
-		Body: []byte("Hello World"),
+		Body: []byte(idString),
 	}
 	// We publish the message to the exahange we created earlier
 	err = channel.Publish("events", "random-key", false, false, message)
 
 	if err != nil {
-		panic("error publishing a message to the queue:" + err.Error())
+		fmt.Println("error publishing a message to the queue:" + err.Error())
+		return err
 	}
 
 	//
-	err = channel.QueueBind("test", "#", "events", false, nil)
+	err = channel.QueueBind("campaigns", "#", "events", false, nil)
 
 	if err != nil {
-		panic("error binding to the queue: " + err.Error())
+		fmt.Println("error binding to the queue: " + err.Error())
+		return err
 	}
 
+	return nil
 }
