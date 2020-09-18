@@ -20,7 +20,7 @@ func GatherCampaignDataByID(id uint64) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(recipientList)
+	fmt.Println(*recipientList)
 	var recipient models.Recipient
 	for _, recipient = range *recipientList {
 		mailData := Mail{

@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"errors"
+	"fmt"
 )
 
 type Recipient struct {
@@ -26,6 +27,7 @@ func FindRecipientsByListId(uid uint32) (*[]Recipient, error) {
 	if gorm.IsRecordNotFoundError(err) {
 		return &[]Recipient{}, errors.New("No recipients found")
 	}
+	fmt.Println("Recipients : ", recipients)
 	return &recipients, err
 }
 
