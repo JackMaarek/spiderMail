@@ -41,7 +41,8 @@ func main() {
 
 	routes.SetupRouter(router)
 
-	go routines.CheckForCampaignsToSend()
+	// Check every 2 minutes if there are campaigns to send
+	go routines.CheckForCampaignsToSend(2)
 
 	log.Fatal(router.Run(":8081"))
 }

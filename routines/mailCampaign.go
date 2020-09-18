@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-func CheckForCampaignsToSend() {
+// CheckForCampaignsToSend checks every interval(minutes) for campaigns to send to rabbitmq
+func CheckForCampaignsToSend(interval int) {
 	// Infinite loop
 	for true {
 		var campaignIds []uint64
@@ -28,7 +29,7 @@ func CheckForCampaignsToSend() {
 			}
 		}
 
-		// Sleep 2 minutes before checking again for campaigns
-		time.Sleep(2 * time.Minute)
+		// Sleep N minutes before checking again for campaigns
+		time.Sleep(time.Duration(interval) * time.Minute)
 	}
 }
