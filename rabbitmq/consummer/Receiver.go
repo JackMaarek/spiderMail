@@ -2,6 +2,8 @@ package consummer
 
 import (
 	"fmt"
+	"github.com/JackMaarek/spiderMail/rabbitmq/mqservices"
+	"github.com/JackMaarek/spiderMail/services"
 	"github.com/streadway/amqp"
 	"os"
 )
@@ -13,7 +15,7 @@ func ReceiveFromRabbit() {
 	url := os.Getenv("AMQP_URL")
 
 	if url == "" {
-		url = "amqp://user:guest@localhost:5672"
+		url = "amqp://user:guest@rabbitmq:5672"
 	}
 	// Connect to the rabbitMQ instance
 	connection, err := amqp.Dial(url)
@@ -38,8 +40,11 @@ func ReceiveFromRabbit() {
 	// The msgs will be a go channel, not an amqp channel
 	for msg := range msgs {
 		messageList = append(messages, msg.Body...)
-		fmt.Println("message received: " + string(msg.Body))
+		message := string(msg.Body)
+		fmt.Println("message received: " + message)
+		id := services.ConvertStringToInt(message)
 		msg.Ack(false)
+		_ = mqservices.GatherCampaignDataByID(id)
 	}
 
 	fmt.Println(messageList)
