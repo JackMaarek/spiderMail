@@ -1,10 +1,10 @@
 package models
 
 import (
-	"fmt"
 	"errors"
 	"github.com/jinzhu/gorm"
 	"time"
+	log "github.com/sirupsen/logrus"
 )
 
 type Campaign struct {
@@ -105,7 +105,7 @@ func GetCampaignsToSend() []uint64 {
 	defer rows.Close()
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		log.Warn("Error: ", )
 		return nil
 	}
 

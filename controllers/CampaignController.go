@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/services"
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,8 @@ func GetCampaigns(c *gin.Context) {
 	campaigns, err = models.FindCampaigns()
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusNotFound, "Couldn't find campaigns.")
+		return
 	}
 
 	c.JSON(http.StatusOK, campaigns)
@@ -30,9 +30,9 @@ func GetCampaignById(c *gin.Context) {
 	campaign, err = models.FindCampaignByID(id)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusNotFound, "Could'nt find campaign.")
+		return
 	}
-
 	c.JSON(http.StatusOK, campaign)
 }
 
@@ -46,7 +46,8 @@ func GetCampaignsByOrganismId(c *gin.Context) {
 	campaigns, err = models.FindCampaignsByOrganismID(id)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusNotFound, "Could'nt find campaign.")
+		return
 	}
 
 	c.JSON(http.StatusOK, campaigns)
@@ -97,7 +98,7 @@ func CreateCampaign(c *gin.Context) {
 
 	err := models.CreateCampaign(&campaign)
 	if err != nil {
-		fmt.Println("Error: ", err)
+		c.JSON(http.StatusUnprocessableEntity, err)
 	}
 
 	c.JSON(http.StatusCreated, campaign)
