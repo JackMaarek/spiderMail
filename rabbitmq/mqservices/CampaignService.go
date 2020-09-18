@@ -5,21 +5,34 @@ import (
 	"github.com/JackMaarek/spiderMail/models"
 )
 
-func SendCampaignByID(id uint64) {
+func GatherCampaignDataByID(id uint64) error {
 	var err error
 	var campaign models.Campaign
-
 	campaign, err = models.FindCampaignByID(id)
 	if err != nil {
-		panic("Cannot get campaign with error:" + err.Error())
+		fmt.Println("Cannot get campaign with error:" + err.Error())
+		return err
 	}
-	fmt.Println(campaign)
 
-	var recipientList models.RecipientsList
+	var recipientList *[]models.Recipient
+	recipientList, err = models.FindRecipientsByListId(uint32(campaign.RecipientsListId))
+	if err != nil {
+		return err
+	}
 	fmt.Println(recipientList)
-	//recipientList, err = models.FindRecipientsListByID(campaign.RecipientsListId)
-	//fmt.Println(recipientList.)
-	//for recipient := range RecipientsList {
+	var recipient models.Recipient
+	for _, recipient = range *recipientList {
+		mailData := Mail{
+			Recipient: recipient.Email,
+			Subject:   campaign.Subject,
+			Body:      campaign.Content,
+		}
+		fmt.Println(mailData)
+		err := CallMailerService(&mailData)
+		if err != nil {
+			fmt.Println("Cannot send email to %s", recipient.ID)
+		}
+	}
 
-	//CallMailerService()
+	return nil
 }
