@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
 	"time"
-
+	log "github.com/sirupsen/logrus"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/routines"
 	"github.com/JackMaarek/spiderMail/routes"

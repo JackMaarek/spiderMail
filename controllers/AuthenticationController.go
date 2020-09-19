@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -32,7 +31,7 @@ func Registration(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, "An error occurred")
 		return
 	}
-	fmt.Println(tokenCreated)
+
 	c.Header("Authorization", "Bearer: "+tokenCreated.Token)
 	c.JSON(http.StatusCreated, "User has been created:"+userCreated.Name+userCreated.Email)
 }
