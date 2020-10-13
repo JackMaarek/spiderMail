@@ -1,9 +1,11 @@
 package mqservices
 
 import (
+	"log"
+	"os"
+
 	"github.com/caarlos0/env/v6"
 	"gopkg.in/gomail.v2"
-	"log"
 )
 
 type Config struct {
@@ -24,7 +26,10 @@ func CallMailerService(mail *Mail) error {
 		return err
 	}
 
-	err := sendMail("902468820252-ta6b9t3tcnon0mfm4b7cvcj6aokgbn5r.apps.googleusercontent.com", "GPpl0cxKVS75dMuIo_mP2YP4", mail.Recipient, mail.Subject, mail.Body)
+	var password string = os.Getenv("PROVIDER_SECRET")
+	var author string = os.Getenv("PROVIDER_KEY")
+
+	err := sendMail(author, password, mail.Recipient, mail.Subject, mail.Body)
 	if err != nil {
 		return err
 	}
