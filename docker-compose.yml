@@ -50,6 +50,8 @@ services:
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: spidermail
+      PROVIDER_KEY: contact.jason.gauvin@gmail.com
+      PROVIDER_PASSWORD: uifbpxvvqwttehyy
     networks:
       - app-tier
 
