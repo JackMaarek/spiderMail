@@ -8,6 +8,8 @@ A front end application is available at the following adress : https://github.co
 
 > 💡 It's strongly advised to start the API before the front-end.
 
+You can acces the API documentation here : ``` https://documenter.getpostman.com/view/6583625/TVRoYSTS ```
+
 ---
 
 ## Requirements
