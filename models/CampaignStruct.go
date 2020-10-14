@@ -1,10 +1,11 @@
 package models
 
 import (
-	"fmt"
 	"errors"
-	"github.com/jinzhu/gorm"
+	"fmt"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Campaign struct {
@@ -16,7 +17,7 @@ type Campaign struct {
 	Subject          string `gorm:"size:255"`
 	Content          string `gorm:"size:1023"`
 	RecipientsListId uint64
-	IsDone		  	 bool	`gorm:"default:false"`
+	IsDone           bool `gorm:"default:false"`
 }
 
 func FindCampaigns() ([]Campaign, error) {

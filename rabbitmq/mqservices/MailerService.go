@@ -1,8 +1,9 @@
 package mqservices
 
 import (
+	"crypto/tls"
+	"fmt"
 	"log"
-	"os"
 
 	"github.com/caarlos0/env/v6"
 	"gopkg.in/gomail.v2"
@@ -20,16 +21,17 @@ type Mail struct {
 }
 
 func CallMailerService(mail *Mail) error {
+	fmt.Println("sdfgfsgh")
 	cfg := Config{}
 	if err := env.Parse(&cfg); err != nil {
 		log.Println(err)
 		return err
 	}
 
-	var password string = os.Getenv("PROVIDER_SECRET")
-	var author string = os.Getenv("PROVIDER_KEY")
+	var password string = "contact.jason.gauvin@gmail.com"
+	var author string = "uifbpxvvqwttehyy"
 
-	err := sendMail(author, password, mail.Recipient, mail.Subject, mail.Body)
+	err := sendMail(author, password, "contact.jason.gauvin@gmail.com", mail.Subject, mail.Body)
 	if err != nil {
 		return err
 	}
@@ -42,8 +44,14 @@ func sendMail(author string, password string, to string, subject string, body st
 	mail.SetHeader("To", to)
 	mail.SetHeader("Subject", subject)
 	mail.SetBody("text/html", body)
+	fmt.Println(author)
+	fmt.Println(password)
 
 	d := gomail.NewDialer("smtp.gmail.com", 465, author, password)
+
+	// This is only needed when SSL/TLS certificate is not valid on server.
+	// In production this should be set to false.
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	if err := d.DialAndSend(mail); err != nil {
 		return err

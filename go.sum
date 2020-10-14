@@ -1,5 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/JackMaarek/spiderMail v0.0.0-20200918155815-b78b5497b8ad h1:LIdaqE0tqN8hX4N3Yx/5Q+KFo/2zg3pKsTtak7nL3ZM=
+github.com/JackMaarek/spiderMail v0.0.0-20200918155815-b78b5497b8ad/go.mod h1:J4EH1ALHmq0c4YXLdy5Pn3fZT+Er3EHr2BcVI+f8JJM=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
 github.com/andybalholm/cascadia v1.1.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/badoux/checkmail v0.0.0-20181210160741-9661bd69e9ad h1:kXfVkP8xPSJXzicomzjECcw6tv1Wl9h1lNenWBfNKdg=

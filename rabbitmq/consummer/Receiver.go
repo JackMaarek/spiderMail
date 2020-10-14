@@ -9,6 +9,7 @@ import (
 )
 
 func ReceiveFromRabbit() {
+	fmt.Println("suuce la sooos")
 	var messages []byte
 	var messageList []byte
 
