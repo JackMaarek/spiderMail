@@ -26,6 +26,11 @@ If not, to run this project, you will need to install the following dependencies
 
 ![build instructions](assets/build.png)
 
+On linux, if you have a permission denied error on mysql_data, run :
+```
+sudo chown -R <user>:<user> ./mysql_data
+```
+
 ## Branch naming convention
 
 You branch should have a name that reflects it's purpose.
