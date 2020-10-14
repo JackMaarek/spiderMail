@@ -16,6 +16,8 @@ If you use docker you will only need:
 * Docker;
 * Docker-Compose;
 
+Create your .env and .env.local file and add provider_key and provider_secret to your gmail application
+
 Refer to [Docker-Setup](#docker-setup) to install with docker.
 
 If not, to run this project, you will need to install the following dependencies on your system:
