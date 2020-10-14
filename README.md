@@ -6,6 +6,8 @@ A small API emailing solution.
 ![assets/front.png](assets/front.png)
 A front end application is available at the following adress : https://github.com/edwinvautier/spidermail-front/
 
+> 💡 It's strongly advised to start the API before the front-end.
+
 ---
 
 ## Requirements
