@@ -1,10 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/JackMaarek/spiderMail/models"
 	"github.com/JackMaarek/spiderMail/rabbitmq/consummer"
 	"github.com/caarlos0/env/v6"
-	"log"
 )
 
 type config struct {

@@ -1,9 +1,10 @@
 package services
 
 import (
+	"os"
+
 	"github.com/caarlos0/env/v6"
 	"gopkg.in/gomail.v2"
-	"os"
 )
 
 type Config struct {
@@ -18,10 +19,11 @@ func CallMailerService() {
 	var password string = os.Getenv("PROVIDER_SECRET")
 	var author string = os.Getenv("PROVIDER_KEY")
 
-	SendMail(author, password, "edwin.vautier@gmail.com", "Test", "<h1>Hello Edwin</h1><br><ul><li>1</li><li>2</li></ul>")
+	SendMail(author, password, "contact.jason.gauvin@gmail.com", "Test", "<h1>Hello Edwin</h1><br><ul><li>1</li><li>2</li></ul>")
 }
 
 func SendMail(author string, password string, to string, subject string, body string) {
+
 	mail := gomail.NewMessage()
 	mail.SetHeader("From", author)
 	mail.SetHeader("To", to)

@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/JackMaarek/spiderMail/models"
-	"github.com/JackMaarek/spiderMail/routines"
 	"github.com/JackMaarek/spiderMail/routes"
+	"github.com/JackMaarek/spiderMail/routines"
 	"github.com/caarlos0/env/v6"
 	"github.com/gin-gonic/gin"
 	cors "github.com/itsjamie/gin-cors"

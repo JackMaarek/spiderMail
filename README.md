@@ -8,6 +8,8 @@ A front end application is available at the following adress : https://github.co
 
 > 💡 It's strongly advised to start the API before the front-end.
 
+You can acces the API documentation here : ``` https://documenter.getpostman.com/view/6583625/TVRoYSTS ```
+
 ---
 
 ## Requirements
@@ -15,6 +17,8 @@ A front end application is available at the following adress : https://github.co
 If you use docker you will only need:
 * Docker;
 * Docker-Compose;
+
+Create your .env and .env.local file and add provider_key and provider_secret to your gmail application
 
 Refer to [Docker-Setup](#docker-setup) to install with docker.
 
@@ -25,6 +29,11 @@ If not, to run this project, you will need to install the following dependencies
 ## Docker-Setup
 
 ![build instructions](assets/build.png)
+
+On linux, if you have a permission denied error on mysql_data, run :
+```
+sudo chown -R <user>:<user> ./mysql_data
+```
 
 ## Branch naming convention
 
